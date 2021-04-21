@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'core.apps.CoreConfig',
+    'submission.apps.SubmissionConfig',
 ]
 
 MIDDLEWARE = [
@@ -124,3 +125,12 @@ USE_TZ = True
 AUTH_USER_MODEL = 'core.User'
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_URL = '/static/'
+#Media files
+
+MEDIA_ROOT = os.path.join(BASE_DIR,'media/')
+MEDIA_URL = '/media/'
+LOGIN_URL = '/login/'
+
+LOGIN_REDIRECT_URL = 'core:thanks'

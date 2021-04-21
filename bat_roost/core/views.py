@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.views import LoginView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse
 from django.views.generic import View
 
 from core.models import User
@@ -10,10 +12,9 @@ class AdminLoginView(LoginView):
 
     authentication_form = AdminAuthForm
     template_name = "core/admin_login.html"
-    redirect_field_name = 'thanks/'
 
 
-class ThanksView(View):
+class ThanksView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
-        return HttpResponse("Thanks")
+        return HttpResponse("Thanks " + request.user.username)
