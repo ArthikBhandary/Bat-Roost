@@ -38,6 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'mailer',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth',
+
     'core.apps.CoreConfig',
     'submission.apps.SubmissionConfig',
 ]
@@ -134,3 +139,15 @@ MEDIA_URL = '/media/'
 LOGIN_URL = '/login/'
 
 LOGIN_REDIRECT_URL = 'core:thanks'
+
+
+EMAIL_BACKEND = "mailer.backend.DbBackend"
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+#password associated with above email-id
+EMAIL_HOST_USER = 'marchspy@gmail.com'
+EMAIL_HOST_PASSWORD = 'marchingspy'#password associated with above email-id
+
+
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'
