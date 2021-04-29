@@ -28,6 +28,8 @@ class Submission(models.Model):
     # latitude = models.DecimalField(max_digits=12,decimal=8)
     # TODO
     # latitude and longitude will probably be replaced with pointfield
+    def __str__(self):
+        return self.get_status_display()
 
 
 class SubmissionImage(models.Model):

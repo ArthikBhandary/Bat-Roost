@@ -8,6 +8,6 @@ class UserDataAPIView(RetrieveUpdateAPIView):
     permission_classes = [IsAuthenticated]
     queryset = User.objects.all()
     serializer_class = UserDataSerializer
-
+    
     def get_object(self):
         return self.request.user
