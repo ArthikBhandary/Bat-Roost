@@ -129,8 +129,8 @@ USE_TZ = True
 
 AUTH_USER_MODEL = 'core.User'
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
 STATIC_URL = '/static/'
 #Media files
 
@@ -147,7 +147,7 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 #password associated with above email-id
 EMAIL_HOST_USER = 'example@email.com'
-EMAIL_HOST_PASSWORD = 'marchingspy'#password associated with above email-id
+EMAIL_HOST_PASSWORD = 'password'#password associated with above email-id
 
 
 DEFAULT_AUTO_FIELD='django.db.models.AutoField'
