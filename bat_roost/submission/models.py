@@ -4,6 +4,10 @@ from submission.misc_functions import image_name
 # Create your models here.
 
 class Submission(models.Model):
+
+    class Meta:
+        ordering = ["-submission_time"]
+        
     REJECTED = 'RJ'
     ACCEPTED = 'AC'
     UNDER_REVIEW = 'UR'

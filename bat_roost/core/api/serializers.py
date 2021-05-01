@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
 from rest_auth.serializers import LoginSerializer
+from rest_auth.registration.serializers import RegisterSerializer
+
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
@@ -25,3 +27,18 @@ class LoginApiSerializers(LoginSerializer):
         )
 
         return auth
+
+
+
+class RegistrationSerializer(RegisterSerializer):
+    first_name = serializers.CharField(required=True)
+    last_name = serializers.CharField(required=False)
+
+    def get_cleaned_data(self):
+        return {
+            'first_name': self.validated_data.get('first_name', ''),
+            'last_name': self.validated_data.get('last_name', ''),
+            'username': self.validated_data.get('username', ''),
+            'password1': self.validated_data.get('password1', ''),
+            'email': self.validated_data.get('email', '')
+        }

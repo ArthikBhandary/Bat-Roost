@@ -37,11 +37,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 
     'mailer',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
+    'rest_auth.registration',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
 
     'core.apps.CoreConfig',
     'submission.apps.SubmissionConfig',
@@ -55,6 +61,14 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 ROOT_URLCONF = 'bat_roost.urls'
@@ -79,7 +93,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'bat_roost.wsgi.application'
 
-
+SITE_ID = 1
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
@@ -129,9 +143,13 @@ USE_TZ = True
 
 AUTH_USER_MODEL = 'core.User'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR,'static')
+]
+
 #Media files
 
 MEDIA_ROOT = os.path.join(BASE_DIR,'media/')
@@ -151,3 +169,12 @@ EMAIL_HOST_PASSWORD = 'password'#password associated with above email-id
 
 
 DEFAULT_AUTO_FIELD='django.db.models.AutoField'
+
+
+
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'core.api.serializers.RegistrationSerializer'
+}
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION ="mandatory"
