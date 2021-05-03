@@ -36,5 +36,5 @@ urlpatterns = [
         "confirm-email/",
         email_verification_sent,
         name="account_email_verification_sent",
-    ),
+    ), # Renders Template only 
 ]
