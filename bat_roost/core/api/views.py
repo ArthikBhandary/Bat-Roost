@@ -1,8 +1,14 @@
 from rest_framework.generics import RetrieveUpdateAPIView
+from rest_framework.views import APIView
+from rest_framework import status
+from rest_framework.response import Response
+
+from allauth.account.utils import send_email_confirmation
 from rest_framework.permissions import IsAuthenticated
-from django.utils.translation import ugettext_lazy as _
-from rest_auth.views import LoginView
-from core.api.serializers import UserDataSerializer, LoginApiSerializers
+# from django.utils.translation import ugettext_lazy as _
+# from rest_auth.views import LoginView
+from core.api.serializers import UserDataSerializer
+# from core.api.serializers import LoginApiSerializers
 from core.models import User
 
 # class EmailVerifiedPermission(BasePermission):
@@ -29,18 +35,27 @@ class UserDataAPIView(RetrieveUpdateAPIView):
     permission_classes = [IsAuthenticated]
     queryset = User.objects.all()
     serializer_class = UserDataSerializer
-    
+
     def get_object(self):
         return self.request.user
 
 
 
+class EmailConfirmationAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        if request.user.is_verified:
+            return Response({'message': 'Email already verified'}, status=status.HTTP_201_CREATED)
+
+        send_email_confirmation(request, request.user)
+        return Response({'message': 'Email confirmation sent'}, status=status.HTTP_201_CREATED)
 
 
 
-class LoginApiView(LoginView):
-
-    serializer_class = LoginApiSerializers
+# class LoginApiView(LoginView):
+#
+#     serializer_class = LoginApiSerializers
     # def process_login(self):
     #     print(self.user.is_verified)
     #     print("\n\n\n\n")

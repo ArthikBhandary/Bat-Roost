@@ -5,4 +5,4 @@ from core.models import User
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    pass
+    readonly_fields=('is_verified',)

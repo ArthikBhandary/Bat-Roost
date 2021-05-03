@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from rest_auth.serializers import LoginSerializer
+# from rest_auth.serializers import LoginSerializer
 from rest_auth.registration.serializers import RegisterSerializer
 
 from django.core.exceptions import ValidationError
@@ -16,17 +16,11 @@ class UserDataSerializer(serializers.ModelSerializer):
         read_only_fields = ("pk", "username", "email", "is_verified")
 
 
-class LoginApiSerializers(LoginSerializer):
-
-    def authenticate(self, **kwargs):
-        auth =  authenticate(self.context['request'], **kwargs)
-
-        raise ValidationError(
-            _("Email is not Verified"),
-            code="unverified",
-        )
-
-        return auth
+# # class LoginApiSerializers(LoginSerializer):
+#
+#     def authenticate(self, **kwargs):
+#         auth =  authenticate(self.context['request'], **kwargs)
+#         return auth
 
 
 
