@@ -12,7 +12,7 @@ class AllSubmissionView(IsUserAdminTestMixin, ListView):
     model = Submission
     paginate_by = 10
 
-    template_name = 'submission/submit.html'
+    template_name = 'submission/all_sub.html'
 
     def get_context_data(self, **kwargs):
         context = super(AllSubmissionView, self).get_context_data(**kwargs)
@@ -32,15 +32,16 @@ class AllSubmissionView(IsUserAdminTestMixin, ListView):
         return context
 
 
-class RejectedSubmissionView(AllSubmissionView):
-    template_name = 'submission/submit.html'
+class AcceptedSubmissionView(AllSubmissionView):
+    model = Submission
+    template_name = 'submission/sub_accept.html'
 
     def get_queryset(self, *args, **kwargs):
-        return Submission.objects.filter(status=Submission.REJECTED)
+        return Submission.objects.filter(status=Submission.ACCEPTED)
 
 
 class ReviewSubmissionView(AllSubmissionView):
-    template_name = 'submission/submit.html'
+    template_name = 'submission/sub_ur.html'
 
     def get_queryset(self, *args, **kwargs):
         return Submission.objects.filter(status=Submission.UNDER_REVIEW)

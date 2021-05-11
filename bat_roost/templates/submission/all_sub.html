@@ -1,0 +1,60 @@
+{% extends 'submission/base.html'%}
+{%block body_block%}
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submissions</title>
+</head>
+<body>
+    <h1> ALL Submissions </h1>
+    {% if submission_list%}
+    <table id='submission'  borderstyle>
+        {%for submission in submission_list%}
+        <tr>
+            <th>User    </th>
+            <th>Status</th>
+            <th>Desciption</th>
+            <th>Approx bats</th>
+            <th>Submission Time</th>
+            
+            <th>Photo taken time</th>
+            
+        </tr>
+        <tr>
+            <td>{{submission.user}}</td>
+            <td>{{submission.status}}</td>
+            <td>{{submission.description}}</td>
+            <td>{{submission.approx_bats}}</td>
+            <td>{{submission.submission_time}}</td>
+           
+            <td>{{submission.photo_taken_time}}</td>
+           
+        </tr>
+        {%endfor%}
+    </table>
+    {% if is_paginated %}
+<ul class="pagination">
+{% if page_obj.has_previous %}
+    <li>
+        <span><a href="?page={{ page_obj.previous_page_number }}">Previous</a></span>
+    </li>
+{% endif %}
+    <li class="">
+        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</span>
+    </li>
+{% if page_obj.has_next %}
+    <li>
+        <span><a href="?page={{ page_obj.next_page_number }}">Next</a></span>
+    </li>
+{% endif %}
+</ul>
+{% else %}
+    
+{% endif %}
+    
+    {%endif%}
+    
+</body>
+{% endblock%}
