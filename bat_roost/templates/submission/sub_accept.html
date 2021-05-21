@@ -3,20 +3,17 @@
 {% block title %} Submissions {% endblock %}
 {% block body_block %}
     <div class="container">
-        <h4>Under Review</h4>
+        <h4>Accepted</h4>
     </div>
     {% if submission_list%}
     <div class="card z-depth-1 table-wrapper">
         <table id='submission' class="responsive-table striped">
             <tr>
-                <th>User    </th>
-
-                <th>Description</th>
-                <th>Approx bats</th>
-                <th>Submission Time</th>
-
-                <th>Photo taken time</th>
-
+                <th colspan="1">User</th>
+                <th colspan="2">Description</th>
+                <th colspan="1">Approx bats</th>
+                <th colspan="1">Submission Time</th>
+                <th colspan="1">Photo taken time</th>
             </tr>
             {%for submission in submission_list%}
             <tr>
