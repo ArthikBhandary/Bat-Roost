@@ -1,9 +1,11 @@
 from django.urls import path, re_path
-from .views import AllSubmissionView, AcceptedSubmissionView, ReviewSubmissionView
+from django.conf.urls import url
+from .views import AllSubmissionView, AcceptedSubmissionView, ReviewSubmissionView,AllsubmissionDetails
 app_name = "submission"
 
 urlpatterns = [
     path('all/',AllSubmissionView.as_view(),name='AllSubmissionView'),
     path('accepted/', AcceptedSubmissionView.as_view(), name="AcceptedSubmissionView"),
     path('review/', ReviewSubmissionView.as_view(), name="ReviewSubmissionView"),
+    url(r'^all/(?P<pk>\d+)/$',AllsubmissionDetails.as_view(),name='detail'),
 ]

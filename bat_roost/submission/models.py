@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.urls import reverse
 from submission.misc_functions import image_name
 # Create your models here.
 
@@ -34,6 +34,8 @@ class Submission(models.Model):
     # latitude and longitude will probably be replaced with pointfield
     def __str__(self):
         return self.get_status_display()
+    def get_absolute_url(self):
+        return reverse("submission:detail",kwargs={'pk':self.pk})
 
 
 class SubmissionImage(models.Model):

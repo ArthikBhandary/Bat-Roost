@@ -1,12 +1,24 @@
 from django.shortcuts import render
+from django.views.generic.base import TemplateView
 from submission.models import Submission,SubmissionImage
-from django.views.generic import ListView
+from django.views.generic import ListView,DetailView
 from django.core.paginator import Paginator
 from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
 # Create your views here.
 
 from core.permission import IsUserAdminTestMixin
+
+
+class AllsubmissionDetails(DetailView):
+    model = Submission
+    template_name = "submission/sub_det.html"
+    
+ 
+
+
+
+
 
 class AllSubmissionView(IsUserAdminTestMixin, ListView):
     model = Submission
