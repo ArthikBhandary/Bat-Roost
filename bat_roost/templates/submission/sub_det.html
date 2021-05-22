@@ -1,63 +1,68 @@
 {%extends "submission/base.html"%}
+{% load static %}
 {%block head_title%}
 Submissions
 {%endblock%}
 {%block body_block%}
 <h4 class="center-align">Submission Details of User {{submission.user}}</h4>
-<div class = "container">   
-   <div class="row">  
+
+<div class = "container">
+   <div class="row">
   <div class="col s12">
     <ul class="tabs">
       <li class="tab col s4"><a href="#images">Images</a></li>
-      <li class="tab col s4"><a class="active" href="#details">Details</a></li>  
-      <li class="tab col s4 "><a href="#location">Location</a></li>  
-    </ul>  
-  </div>  
+      <li class="tab col s4"><a class="active" href="#details">Details</a></li>
+      <li class="tab col s4 "><a href="#location">Location</a></li>
+    </ul>
+  </div>
   <div id="images" class="col s12">
+
     <div class="carousel carousel-slider">
-        <a class="carousel-item" href="#one!"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFokuIjWnHD5UGB2aJf5FzsLNmAdXCCYjeIw&usqp=CAU" height="300px" width="500px"></a>
-        <a class="carousel-item" href="#two!"><img src="https://static.remove.bg/sample-gallery/graphics/bird-thumbnail.jpg" height="300px" width="500px"></a>
+        <a class="carousel-item center" href="#"><img src="https://tse4.mm.bing.net/th?id=OIP.M5jFucSp3GpcvROrI-YmOgHaE8&pid=Api" style="height:400px;width:auto"></a>
+        <a class="carousel-item center" href="#"><img src="https://tse4.mm.bing.net/th?id=OIP.M5jFucSp3GpcvROrI-YmOgHaE8&pid=Api" style="height:400px;width:auto"></a>
+        <a class="carousel-item center" href="#"><img src="{% static 'img/bcit_logo.png'%}"  style="height:400px;width:auto"></a>
+
     </div>
-    
-  </div>  
+
+  </div>
   <div id="details" class="col s12">
     <div class='divider'></div>
-    <div class='card-panel cyan lighten-3'>
+    <div class='card-panel cyan lighten-5'>
         <table class='table-wrapper'>
             <tr>
-            <th class='center-align'>Data</th>
-            <th class='center-align'>Details</th>
+                <th colspan="1">Data</th>
+                <th colspan="3">Details</th>
             </tr>
             <tr >
-                <td class='center-align'>USERNAME</td>
-                <td class='center-align'>{{submission.user}}</td>
+                <td colspan="1">USERNAME</td>
+                <td colspan="3">{{submission.user}}</td>
             </tr>
             <tr>
-                <td class='center-align'>DESCRIPTION</td>
-                <td class='center-align'>{{submission.description}}</td>
+                <td colspan="1">DESCRIPTION</td>
+                <td colspan="3">{{submission.description}}</td>
             </tr>
-                <td class='center-align'> BAT COUNT</td>
-                <td class='center-align'>{{submission.approx_bats}}</td>
+                <td colspan="1"> BAT COUNT</td>
+                <td colspan="3">{{submission.approx_bats}}</td>
             <tr>
-                <td class='center-align'>SUBMISSION TIME</td>
-                <td class='center-align'>{{submission.submission_time}}</td>
+                <td colspan="1">SUBMISSION TIME</td>
+                <td colspan="3">{{submission.submission_time}}</td>
             </tr>
             <tr>
-                <td class='center-align'>PHOTO TAKEN TIME</td>
-                <td class='center-align'>{{submission.photo_taken_time}}</td>
+                <td colspan="1">PHOTO TAKEN TIME</td>
+                <td colspan="3">{{submission.photo_taken_time}}</td>
             </tr>
         </table>
-        
+
 
     </div>
 
 
-  </div>  
-  <div id="location" class="col s12">Sent Items</div>  
-</div>  
-</div>  
+  </div>
+  <div id="location" class="col s12">Sent Items</div>
+</div>
+</div>
 
-        
+
 {%endblock%}
 {% block extra_css_js %}
 <script>
@@ -66,10 +71,13 @@ Submissions
         M.Tabs.init(myTabs,{});
     })
 
-    $('.carousel.carousel-slider').carousel({
-        fullWidth: true
-      });
-          
+    $(document).ready(function(){
+        $('.carousel.carousel-slider').carousel({
+            fullWidth:true,
+            indicators:true,
+          });
+    });
+
 </script>
-     
+
 {% endblock %}

@@ -5,7 +5,6 @@ from django.utils.translation import ugettext_lazy as _
 class AdminAuthForm(AuthenticationForm):
 
     def confirm_login_allowed(self, user):
-        print("Here")
         if not user.is_admin:
             raise ValidationError(
                 _("This is not an admin account"),

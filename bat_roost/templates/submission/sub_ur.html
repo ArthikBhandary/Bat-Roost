@@ -1,6 +1,9 @@
 {% extends 'submission/base.html'%}
-
-{% block title %} Submissions {% endblock %}
+{% load static %}
+{% block title %} Under review {% endblock %}
+{% block extra_head %}
+    <script src="{% static 'js/submission.js' %}"></script>
+{% endblock%}
 {% block body_block %}
     <div class="container">
         <h4>Under Review</h4>
@@ -9,39 +12,68 @@
     <div class="card z-depth-1 table-wrapper">
         <table id='submission' class="responsive-table striped">
             <tr>
-                <th colspan="1">User</th>
-                <th colspan="2">Description</th>
+                <th colspan="2">User</th>
+                <th colspan="3">Description</th>
                 <th colspan="1">Approx bats</th>
-                <th colspan="1">Submission Time</th>
-                <th colspan="1">Photo taken time</th>
+                <th colspan="2">Submission Time</th>
+                <th colspan="2">Photo taken time</th>
+                <th colspan="2">Action</th>
             </tr>
             {%for submission in submission_list%}
             <tr>
-                <td colspan="1">{{submission.user}}</td>
-                <td colspan="2">{{submission.description}}</td>
+                <td colspan="2">{{submission.user}}</td>
+                <td colspan="3">{{submission.description}}</td>
                 <td colspan="1">{{submission.approx_bats}}</td>
-                <td colspan="1">{{submission.submission_time}}</td>
-                <td colspan="1">{{submission.photo_taken_time}}</td>
+                <td colspan="2">{{submission.submission_time}}</td>
+                <td colspan="2">{{submission.photo_taken_time}}</td>
+                <td colspan="2">
+                    {% if submission.is_under_review %}
+                    <a class="waves-effect waves-light green accent-4 btn-small">
 
+                        <i class="material-icons left">check</i>
+                        Accept
+                    </a>
+                    <a class="waves-effect waves-light red darken-1 btn-small">
+                        <i class="material-icons left">clear</i>
+                        Reject
+                    </a>
+                    {% endif %}
+                </td>
+            </tr>
             </tr>
             {%endfor%}
         </table>
     </div>
+
     {% if is_paginated %}
         <ul class="pagination">
-        {% if page_obj.has_previous %}
-            <li>
-                <span><a href="?page={{ page_obj.previous_page_number }}">Previous</a></span>
-            </li>
-        {% endif %}
-            <li class="">
-                <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</span>
-            </li>
-        {% if page_obj.has_next %}
-            <li>
-                <span><a href="?page={{ page_obj.next_page_number }}">Next</a></span>
-            </li>
-        {% endif %}
+            {% if page_obj.has_previous %}
+                <li class="waves-effect"><a href="?page={{ page_obj.previous_page_number }}">
+                    <b><i class="material-icons">chevron_left</i></b>
+                </a></li>
+            {% else %}
+                <li class="disabled "><a href="#"><i class="material-icons">chevron_left</i></a></li>
+            {% endif %}
+            {% if page_obj.number|add:"-4" > 1%}
+                <li class="waves-effect"><a href="?page={{ page_obj.number|add:'-5' }}">2</a></li>
+            {% endif %}
+            {% for i in page_obj.paginator.page_range %}
+                {% if page_obj.number == i %}
+                <li class="active"><a href="?page={{i}}">{{i}}</a></li>
+                {% else %}
+                <li class="waves-effect"><a href="?page={{i}}">{{ i }}</a></li>
+                {% endif %}
+            {% endfor %}
+            {% if page_obj.paginator.num_pages > page_obj.number|add:'4' %}
+                <li><a href="?page={{ page_obj.number|add:'5' }}">. . .</a></li>
+            {% endif %}
+            {% if page_obj.has_next %}
+                <li class="waves-effect"><a href="?page={{ page_obj.next_page_number }}">
+                    <b><i class="material-icons">chevron_right</i></b>
+                </a></li>
+            {% else %}
+                <li class="disabled "><a href="#"><i class="material-icons">chevron_right</i></a></li>
+            {% endif %}
         </ul>
     {% endif %}
 
@@ -50,7 +82,7 @@
 {% endblock%}
 
 {% block extra_css_js %}
-    <style>
+<style>
     .table-wrapper{
         margin:20px;
         border-radius: 10px;
@@ -59,5 +91,13 @@
 
         padding:10px;
     }
-    </style>
+    .action {
+        text-align:center;
+    }
+</style>
+<script>
+    let glob_status_url = "{% url 'submission:status_update' %}";
+    let glob_csrf_token = "{{ csrf_token }}";
+    let preloader ='<div class="preloader-wrapper small active"><div class="spinner-layer spinner-blue-only"><div class="circle-clipper left"><div class="circle"></div></div><div class="gap-patch"><div class="circle"></div></div><div class="circle-clipper right"><div class="circle"></div></div></div></div>'
+</script>
 {% endblock %}
