@@ -17,7 +17,7 @@
                 <th colspan="1">Approx bats</th>
                 <th colspan="2">Submission Time</th>
                 <th colspan="2">Photo taken time</th>
-                <th colspan="2">Action</th>
+                <th colspan="2" class="action">Action</th>
             </tr>
             {%for submission in submission_list%}
             <tr>
@@ -26,20 +26,19 @@
                 <td colspan="1">{{submission.approx_bats}}</td>
                 <td colspan="2">{{submission.submission_time}}</td>
                 <td colspan="2">{{submission.photo_taken_time}}</td>
-                <td colspan="2">
-                    {% if submission.is_under_review %}
-                    <a class="waves-effect waves-light green accent-4 btn-small">
-
-                        <i class="material-icons left">check</i>
-                        Accept
-                    </a>
-                    <a class="waves-effect waves-light red darken-1 btn-small">
-                        <i class="material-icons left">clear</i>
-                        Reject
-                    </a>
-                    {% endif %}
+                <td colspan="2" class="action">
+                    <span id="status{{ submission.id }}"></span>
+                    <span id="action{{ submission.id }}">
+                        <a data-id="{{ submission.id }}" class="waves-effect waves-light green accent-4 btn-small accept-submission">
+                            <i class="material-icons left">check</i>
+                            Accept
+                        </a>
+                        <a data-id="{{ submission.id }}" class="waves-effect waves-light red darken-1 btn-small reject-submission">
+                            <i class="material-icons left">clear</i>
+                            Reject
+                        </a>
+                    </span>
                 </td>
-            </tr>
             </tr>
             {%endfor%}
         </table>

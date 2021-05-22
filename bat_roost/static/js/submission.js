@@ -18,8 +18,8 @@ $(document).ready(function(){
             success: function(response){
                 console.log(response)
                if(response.success==true){
-                   $("#status"+id).text(response.status_display);
                    $("#action"+id).empty();
+                   $("#status"+id).text(response.status_display);
                }
                else{
                    console.log("Failed");
@@ -43,8 +43,8 @@ $(document).ready(function(){
             success: function(response){
                 console.log(response)
                 if(response.success==true){
-                    $("#status"+id).text(response.status_display);
                     $("#action"+id).empty();
+                    $("#status"+id).text(response.status_display);
                 }
                 else{
                 }
