@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,HttpResponse
 from django.views.generic.base import TemplateView
 from submission.models import Submission,SubmissionImage
 from django.views import View
@@ -8,7 +8,7 @@ from django.core.paginator import Paginator
 from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
 from django.shortcuts import get_object_or_404
-
+import csv
 
 from core.permission import IsUserAdminTestMixin
 
@@ -90,3 +90,12 @@ class StatusView(IsUserAdminTestMixin, View):
             "status":obj.status,
             "status_display":obj.get_status_display(),
         })
+def DownloadSubmission(request):
+    items = Submission.objects.filter(status=Submission.ACCEPTED)
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="submission.csv"'
+    writer = csv.writer(response,delimiter=',')
+    writer.writerow(['user','description','approx_bats','submission_time','photo_taken_time'])
+    for obj in items:
+        writer.writerow([obj.user,obj.description,obj.approx_bats,obj.submission_time,obj.photo_taken_time]) 
+        return response
