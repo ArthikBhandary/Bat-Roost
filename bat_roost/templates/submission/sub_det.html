@@ -3,6 +3,9 @@
 {%block head_title%}
 Submissions
 {%endblock%}
+{% block extra_head %}
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+{% endblock %}
 {%block body_block%}
 <h4 class="center-align">Submission Details of User {{submission.user}}</h4>
 
@@ -16,6 +19,7 @@ Submissions
     </ul>
   </div>
   <div id="images" class="col s12">
+      <div class='section'></div>
 
     <div class="carousel carousel-slider">
         <a class="carousel-item center" href="#"><img src="https://tse4.mm.bing.net/th?id=OIP.M5jFucSp3GpcvROrI-YmOgHaE8&pid=Api" style="height:400px;width:auto"></a>
@@ -26,7 +30,7 @@ Submissions
 
   </div>
   <div id="details" class="col s12">
-    <div class='divider'></div>
+    <div class='section'></div>
     <div class='card-panel cyan lighten-5'>
         <table class='table-wrapper'>
             <tr>
@@ -58,14 +62,27 @@ Submissions
 
 
   </div>
-  <div id="location" class="col s12">Sent Items</div>
+  <div id="location" class="col s12 center">
+      <div class='section'></div>
+
+
+      <div id="map">
+          <img src="https://maps.googleapis.com/maps/api/staticmap?zoom=15&size=1000x1000&maptype=hybrid&markers=color:red|label:Roost|40.714728,-73.998672&key=AIzaSyDbNqXm6_kG-MtXBAWFiqxWwrs_TK97Oz8" >
+      </div>
+
+  </div>
 </div>
 </div>
 
 
 {%endblock%}
 {% block extra_css_js %}
+
+
+
+
 <script>
+
     document.addEventListener("DOMContentLoaded",function(){
         const myTabs = document.querySelector('.tabs');
         M.Tabs.init(myTabs,{});
@@ -79,5 +96,6 @@ Submissions
     });
 
 </script>
+
 
 {% endblock %}

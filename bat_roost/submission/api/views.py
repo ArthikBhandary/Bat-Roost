@@ -25,5 +25,4 @@ class SubmissionListApiView(ListAPIView):
 class SubmissionDetailApiView(RetrieveAPIView):
     serializer_class = SubmissionDetailSerializer
     def get_object(self):
-        print(self.request.GET.get("id"))
         return get_object_or_404(Submission,pk=self.request.GET.get("pk"))
