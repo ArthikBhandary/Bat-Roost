@@ -9,6 +9,4 @@ urlpatterns = [
     path("create/", views.SubmissionCreateAPIView.as_view(), name="create"),
     path("details/", views.SubmissionDetailApiView.as_view(), name="details"),
     path("download/", views.SubmissionListDownloadApiView.as_view(), name="details"),
-    path("test/", views.ImageView.as_view(), name="details"),
-
 ]
