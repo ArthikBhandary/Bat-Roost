@@ -39,7 +39,7 @@ class Submission(models.Model):
     # TODO
     # latitude and longitude will probably be replaced with pointfield
     def __str__(self):
-        return self.get_status_display()
+        return str(self.pk)+ " " + self.get_status_display()
 
     def get_absolute_url(self):
         return reverse("submission:detail",kwargs={'pk':self.pk})
@@ -54,3 +54,10 @@ class Submission(models.Model):
 class SubmissionImage(models.Model):
     submission = models.ForeignKey("Submission", on_delete=models.CASCADE, related_name="images")
     image = models.ImageField(upload_to=image_name)
+    def delete(self, *args, **kwargs):
+        if self.image: # If image isn't empty, delete image from storage
+            storage, path = self.image.storage, self.image.path
+            super(Recipe, self).delete(*args, **kwargs)
+            storage.delete(path)
+        else:
+            super(Recipe, self).delete(*args, **kwargs)
