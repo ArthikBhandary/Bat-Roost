@@ -20,7 +20,7 @@ class SubmissionCreateAPIView(CreateAPIView):
     serializer_class = SubmissionSerializer
 
     def perform_create(self, serializer):
-        obj = serializer.save(user=User.objects.all()[0])
+        obj = serializer.save(user=self.request.user)
         id  =   obj.id
         # converts querydict to original dict
         images = dict((self.request.data).lists())['image']
@@ -44,6 +44,7 @@ class SubmissionListApiView(ListAPIView):
 
 
 class SubmissionDetailApiView(RetrieveAPIView):
+    permission_classes = [IsAuthenticated]
     serializer_class = SubmissionDetailSerializer
 
     def get_object(self):
