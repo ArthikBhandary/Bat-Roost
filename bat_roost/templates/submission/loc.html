@@ -19,8 +19,8 @@
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 </head>
 <body>
-    
-    
+
+
     <h3>Marked Locations</h3>
     {{ markers|json_script:"markers-data" }}
     <div id="map"></div>
@@ -31,7 +31,11 @@
     const map = L.map('map')
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: attribution }).addTo(map);
     const markers = JSON.parse(document.getElementById('markers-data').textContent);
-    let feature = L.geoJSON(markers).bindPopup(function (layer) { return layer.feature.properties.name; }).addTo(map);
+    let feature = L.geoJSON(markers).bindPopup(function (layer) {
+
+        console.log(layer.feature.properties.user);
+        return "<a href='http://{{ domain }}/submission/all/" + layer.feature.properties.pk + "/'>View details</a>";
+    }).addTo(map);
     map.fitBounds(feature.getBounds(), { padding: [100, 100] });
 
     </script>

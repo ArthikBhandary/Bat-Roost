@@ -105,4 +105,5 @@ class LocationView(TemplateView):
         """Return the view context data."""
         context = super().get_context_data(**kwargs)
         context["markers"] = json.loads(serialize("geojson", Submission.objects.all()))
+        context["domain"] = self.request.META['HTTP_HOST']
         return context
