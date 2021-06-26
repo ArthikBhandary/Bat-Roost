@@ -1,7 +1,9 @@
-from django.db import models
+from django.contrib.gis.db import models as models
+
 from django.urls import reverse
 from submission.misc_functions import image_name
-
+from django.contrib.gis.geos import Point
+from django.db.models.functions import Cast
 
 class Submission(models.Model):
 
@@ -34,10 +36,9 @@ class Submission(models.Model):
     submission_time = models.DateTimeField(auto_now_add=True)
     rejected_time = models.DateTimeField(blank=True, null=True)
     photo_taken_time = models.DateTimeField()
-    # longitude = models.DecimalField(max_digits=12,decimal=8)
-    # latitude = models.DecimalField(max_digits=12,decimal=8)
-    # TODO
-    # latitude and longitude will probably be replaced with pointfield
+    location = models.PointField()
+    
+    objects = models.Manager()
     def __str__(self):
         return str(self.pk)+ " " + self.get_status_display()
 

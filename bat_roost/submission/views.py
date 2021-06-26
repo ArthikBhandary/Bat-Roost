@@ -9,7 +9,8 @@ from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
 from django.shortcuts import get_object_or_404
 import csv
-
+import json
+from django.core.serializers import serialize
 from core.permission import IsUserAdminTestMixin
 
 
@@ -96,3 +97,12 @@ def DownloadSubmission(request):
         writer.writerow([obj.user, obj.description, obj.approx_bats,
                          obj.submission_time, obj.photo_taken_time])
     return response
+
+class LocationView(TemplateView):
+     model = Submission
+     template_name = 'submission/loc.html'
+     def get_context_data(self, **kwargs):
+        """Return the view context data."""
+        context = super().get_context_data(**kwargs)
+        context["markers"] = json.loads(serialize("geojson", Submission.objects.all()))
+        return context

@@ -38,6 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'django.contrib.gis',
+    'leaflet',
+    'djgeojson',
 
     'rest_framework',
     'rest_framework.authtoken',
@@ -98,8 +101,12 @@ SITE_ID = 1
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'agricom',
+        'USER': 'postgres',
+        'HOST': 'localhost',
+        'PASSWORD': 'newPassword',
+        'PORT': '5432',
     }
 }
 
