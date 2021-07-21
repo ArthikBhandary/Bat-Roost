@@ -5,6 +5,15 @@ Submissions
 {%endblock%}
 {% block extra_head %}
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+   
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
+   
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    <script src="{% static 'js/submission.js' %}"></script>
+
+
+
 {% endblock %}
 {%block body_block%}
 <h4 class="center-align">Submission Details of User {{submission.user}}</h4>
@@ -55,6 +64,20 @@ Submissions
                 <td colspan="1">PHOTO TAKEN TIME</td>
                 <td colspan="3">{{submission.photo_taken_time}}</td>
             </tr>
+            <tr>
+            <td id="action{{ submission.id }}" colspan="2" class="action">
+                {% if submission.is_under_review %}
+                <a data-id="{{ submission.id }}" class="waves-effect waves-light green accent-4 btn-small accept-submission">
+                    <i class="material-icons left">check</i>
+                    Accept
+                </a>
+                <a data-id="{{ submission.id }}" class="waves-effect waves-light red darken-1 btn-small reject-submission">
+                    <i class="material-icons left">clear</i>
+                    Reject
+                </a>
+                {% endif %}
+            </td>
+        </tr>
         </table>
 
 
@@ -67,7 +90,22 @@ Submissions
 
 
       <div id="map">
-          <img src="https://maps.googleapis.com/maps/api/staticmap?zoom=15&size=1000x1000&maptype=hybrid&markers=color:red|label:Roost|40.714728,-73.998672&key=AIzaSyDbNqXm6_kG-MtXBAWFiqxWwrs_TK97Oz8" >
+        <h3>Marked Locations</h3>
+        {{ markers|json_script:"markers-data" }}
+        <div id="map"></div>
+        <script type="text/javascript">
+            const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            const map = L.map('map')
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: attribution }).addTo(map);
+            const markers = JSON.parse(document.getElementById('markers-data').textContent);
+            let feature = L.geoJSON(markers).bindPopup(function (layer) {
+        
+                console.log(layer.feature.properties.user);
+                return "<a href='http://{{ domain }}/submission/all/" + layer.feature.properties.pk + "/'>View details</a>";
+            }).addTo(map);
+            map.fitBounds(feature.getBounds(), { padding: [100, 100] });
+        
+            </script>
       </div>
 
   </div>
@@ -77,6 +115,22 @@ Submissions
 
 {%endblock%}
 {% block extra_css_js %}
+<style>
+    #map {
+        width: 700px;
+        height: 300px;
+      }
+</style>
+<script>
+    let glob_status_url = "{% url 'submission:status_update' %}";
+    let glob_csrf_token = "{{ csrf_token }}";
+    let preloader ='<div class="preloader-wrapper small active"><div class="spinner-layer spinner-blue-only"><div class="circle-clipper left"><div class="circle"></div></div><div class="gap-patch"><div class="circle"></div></div><div class="circle-clipper right"><div class="circle"></div></div></div></div>'
+</script>
+<script>
+    $(document).ready(function(){
+        $('select').formSelect();
+      });
+ </script>
 
 
 
@@ -95,7 +149,10 @@ Submissions
           });
     });
 
+    
+
 </script>
+
 
 
 {% endblock %}

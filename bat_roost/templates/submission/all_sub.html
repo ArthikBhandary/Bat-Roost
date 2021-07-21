@@ -3,11 +3,64 @@
 
 {% block title %} Submissions {% endblock %}
 {% block extra_head %}
-    <script src="{% static 'js/submission.js' %}"></script>
+    <!-- <script src="{% static 'js/submission.js' %}"></script> -->
 {% endblock%}
+
 {% block body_block %}
+<form class = "card-panel #e0f2f1 teal lighten-5" method='get' >
+    <div style="display:inline-block">
+    <h5>Filter options:</h5>
+
+    <div class="input-field col s12" style="height: 20px;width: 200px;display:inline-block">
+      <select name="status">
+        <option value="" disabled selected>All submissions</option>
+        <option value="Accepted">Accepted</option>
+        <option value="UnderReview">UnderReview</option>
+    
+      </select>
+    </div>
+    
+    <div style="display:inline-block">
+        <h6 style="margin-left: 20px;">Pk value</h6>
+    </div>
+    <div class="input-field col s6" style="display:inline-block">
+    
+      <input placeholder="Placeholder" id="pk" type="text" class="validate" style="margin-left:10px;width:20px;" name="pk" >
+    </div>
+    
+</div>
+
+    <div style="display:inline-block;margin-left:50px">
+        
+        <h6>Sort by</h6>
+        <p>
+            <label>
+              <input  name="group1" type="radio" value="pt" />
+              <span >Photo Taken Time</span>
+              
+            </label>
+          </p>
+          <p>
+            <label>
+              <input  name="group1" type="radio" value="st" />
+              <span>Submission Time</span>
+            </label>
+          </p>
+
+    </div>
+
+     
+    
+     <button class="btn waves-effect waves-light" type="submit"  style="margin-left:25px;">Submit
+        
+    </button> 
+
+    
+  </form>
+
+
     <div class="container">
-        <h4>All Submissions</h4>
+        <h4></h4>
     </div>
     {% if submission_list%}
     <div class="card z-depth-1 table-wrapper">
@@ -19,7 +72,7 @@
                 <th colspan="2">Submission Time</th>
                 <th colspan="2">Photo taken time</th>
                 <th colspan="2">Status</th>
-                <th colspan="2" class="action">Action</th>
+                
             </tr>
             {%for submission in submission_list%}
             <tr>
@@ -29,7 +82,7 @@
                 <td colspan="2">{{submission.submission_time}}</td>
                 <td colspan="2">{{submission.photo_taken_time}}</td>
                 <td id="status{{ submission.id }}" colspan="2">{{submission.get_status_display}}</td>
-                <td id="action{{ submission.id }}" colspan="2" class="action">
+                <!-- <td id="action{{ submission.id }}" colspan="2" class="action">
                     {% if submission.is_under_review %}
                     <a data-id="{{ submission.id }}" class="waves-effect waves-light green accent-4 btn-small accept-submission">
                         <i class="material-icons left">check</i>
@@ -40,7 +93,7 @@
                         Reject
                     </a>
                     {% endif %}
-                </td>
+                </td> -->
             </tr>
             {%endfor%}
         </table>
@@ -101,5 +154,10 @@
     let glob_status_url = "{% url 'submission:status_update' %}";
     let glob_csrf_token = "{{ csrf_token }}";
     let preloader ='<div class="preloader-wrapper small active"><div class="spinner-layer spinner-blue-only"><div class="circle-clipper left"><div class="circle"></div></div><div class="gap-patch"><div class="circle"></div></div><div class="circle-clipper right"><div class="circle"></div></div></div></div>'
+</script>
+<script>
+    $(document).ready(function(){
+        $('select').formSelect();
+      });
 </script>
 {% endblock %}

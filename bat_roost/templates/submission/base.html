@@ -19,6 +19,8 @@
 </head>
 
 <body class="yellow lighten-5">
+
+
     <nav class="teal accent-3">
         <div class="nav-wrapper teal accent-3 ">
             <a href="#" data-target="mobile-nav" class="sidenav-trigger left"><i class="material-icons">menu</i></a>
@@ -29,17 +31,27 @@
                 <li>
                     <a class="nav-link black-text" href="{% url 'submission:AllSubmissionView' %}">All Submission</a>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                   <a class="nav-link black-text" href="{% url 'submission:AcceptedSubmissionView' %}">Accepted</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link black-text" href="{% url 'submission:ReviewSubmissionView'%}">Under Review</a>
+                </li> -->
+                <li class="nav-item">
+                  <a class="nav-link black-text" href="{% url 'submission:DownloadSubmission' %}">DownloadCSV</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link black-text" href="{% url 'submission:loc' %}">All locations</a>
                 </li>
             </ul>
         </div>
+        
     </nav>
+   
+    
 
-    <ul class="sidenav teal accent-1" id="mobile-nav">
+
+    <!-- <ul class="sidenav teal accent-1" id="mobile-nav">
         <li>
             <a class="nav-link black-text" href="{% url 'submission:AllSubmissionView' %}">All Submission</a>
         </li>
@@ -49,7 +61,7 @@
         <li class="nav-item">
           <a class="nav-link black-text" href="{% url 'submission:ReviewSubmissionView'%}">Under Review</a>
         </li>
-    </ul>
+    </ul> -->
     <div class=''>
         {% block body_block %}
         {% endblock %}

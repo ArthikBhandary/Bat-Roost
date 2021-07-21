@@ -2,8 +2,8 @@ from django.urls import path, re_path
 from django.conf.urls import url
 from .views import AllSubmissionView, AcceptedSubmissionView, ReviewSubmissionView, \
                     AllsubmissionDetails, StatusView,DownloadSubmission,LocationView
-from .models import Submission
-from djgeojson.views import GeoJSONLayerView
+
+
 app_name = "submission"
 
 urlpatterns = [

@@ -2,8 +2,7 @@ from django.contrib.gis.db import models as models
 
 from django.urls import reverse
 from submission.misc_functions import image_name
-from django.contrib.gis.geos import Point
-from django.db.models.functions import Cast
+
 
 class Submission(models.Model):
 
