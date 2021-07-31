@@ -5,9 +5,9 @@ Submissions
 {%endblock%}
 {% block extra_head %}
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-   
+
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
-   
+
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
     <script src="{% static 'js/submission.js' %}"></script>
@@ -31,10 +31,9 @@ Submissions
       <div class='section'></div>
 
     <div class="carousel carousel-slider">
-        <a class="carousel-item center" href="#"><img src="https://tse4.mm.bing.net/th?id=OIP.M5jFucSp3GpcvROrI-YmOgHaE8&pid=Api" style="height:400px;width:auto"></a>
-        <a class="carousel-item center" href="#"><img src="https://tse4.mm.bing.net/th?id=OIP.M5jFucSp3GpcvROrI-YmOgHaE8&pid=Api" style="height:400px;width:auto"></a>
-        <a class="carousel-item center" href="#"><img src="{% static 'img/bcit_logo.png'%}"  style="height:400px;width:auto"></a>
-
+        {% for submissionImage in submission.images.all %}
+            <a class="carousel-item center" href="#"><img src="{{ submissionImage.image.url }}"></a>
+        {% endfor %}
     </div>
 
   </div>
@@ -45,6 +44,10 @@ Submissions
             <tr>
                 <th colspan="1">Data</th>
                 <th colspan="3">Details</th>
+            </tr>
+            <tr >
+                <td colspan="1">ID</td>
+                <td colspan="3">{{ submission.pk }}</td>
             </tr>
             <tr >
                 <td colspan="1">USERNAME</td>
@@ -64,9 +67,21 @@ Submissions
                 <td colspan="1">PHOTO TAKEN TIME</td>
                 <td colspan="3">{{submission.photo_taken_time}}</td>
             </tr>
+            {% if submission.review %}
+                <tr>
+                    <td colspan="1">Review/Comments</td>
+                    <td colspan="3">{{submission.review}}</td>
+                </tr>
+            {% endif %}
             <tr>
+            {% if submission.is_under_review %}
+
             <td id="action{{ submission.id }}" colspan="2" class="action">
-                {% if submission.is_under_review %}
+                <div class="input-field col s6" style="display:inline-block">
+                  <input placeholder="Add review" id="review" type="text" class="validate" name="review" >
+                  <label for="review">Enter Comments</label>
+                </div>
+
                 <a data-id="{{ submission.id }}" class="waves-effect waves-light green accent-4 btn-small accept-submission">
                     <i class="material-icons left">check</i>
                     Accept
@@ -75,8 +90,9 @@ Submissions
                     <i class="material-icons left">clear</i>
                     Reject
                 </a>
-                {% endif %}
             </td>
+            {% endif %}
+
         </tr>
         </table>
 
@@ -85,26 +101,28 @@ Submissions
 
 
   </div>
-  <div id="location" class="col s12 center">
+  <div id="location" class="row ">
       <div class='section'></div>
 
 
-      <div id="map">
-        <h3>Marked Locations</h3>
         {{ markers|json_script:"markers-data" }}
-        <div id="map"></div>
+        <div id="map">
+
         <script type="text/javascript">
+            $(document).ready(function(){
             const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             const map = L.map('map')
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: attribution }).addTo(map);
             const markers = JSON.parse(document.getElementById('markers-data').textContent);
             let feature = L.geoJSON(markers).bindPopup(function (layer) {
-        
+
                 console.log(layer.feature.properties.user);
                 return "<a href='http://{{ domain }}/submission/all/" + layer.feature.properties.pk + "/'>View details</a>";
             }).addTo(map);
             map.fitBounds(feature.getBounds(), { padding: [100, 100] });
-        
+            map.setZoom(11);
+        });
+
             </script>
       </div>
 
@@ -117,9 +135,11 @@ Submissions
 {% block extra_css_js %}
 <style>
     #map {
-        width: 700px;
-        height: 300px;
-      }
+        min-width:500px;
+        min-height:500px;
+      width: 100%;
+      height: 100%;
+    }
 </style>
 <script>
     let glob_status_url = "{% url 'submission:status_update' %}";
@@ -149,7 +169,7 @@ Submissions
           });
     });
 
-    
+
 
 </script>
 

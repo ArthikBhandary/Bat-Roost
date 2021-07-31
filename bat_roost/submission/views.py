@@ -33,7 +33,7 @@ class AllSubmissionView(IsUserAdminTestMixin, ListView):
 
     # def get_queryset(self, *args, **kwargs):
     #     if self.request.GET.get('Accepted'):
-            
+
     #         return Submission.objects.filter(status=Submission.ACCEPTED)
 
     #     elif self.request.GET.get('UnderReview'):
@@ -58,9 +58,9 @@ class AllSubmissionView(IsUserAdminTestMixin, ListView):
         if self.request.GET.get("group1")=="pt":
             submission_list = submission_list.order_by("photo_taken_time")
 
-            
+
         paginator = Paginator(submission_list, self.paginate_by)
-            
+
         page = self.request.GET.get('page')
 
         try:
@@ -100,6 +100,7 @@ class StatusView(IsUserAdminTestMixin, View):
     def post(self, request):
         obj = get_object_or_404(Submission, id=request.POST.get("id"))
         status = request.POST.get("status")
+        review = request.POST.get("review")
         if not Submission.is_valid_status(status):
             return JsonResponse({
                 "success": False,
@@ -107,6 +108,7 @@ class StatusView(IsUserAdminTestMixin, View):
             }, status=400)
 
         obj.status = status
+        obj.review = review
         obj.save()
         return JsonResponse({
             "success": True,

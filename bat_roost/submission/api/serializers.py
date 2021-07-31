@@ -21,8 +21,8 @@ class SubmissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Submission
         fields = ("pk", "description", "approx_bats",
-                  "photo_taken_time", "images",  "latitude", "longitude")
-        read_only_fields = ["pk", "images",  "latitude", "longitude"]
+                  "photo_taken_time", "images",  "latitude", "longitude", "review")
+        read_only_fields = ["pk", "images",  "latitude", "longitude", "review"]
 
 
 class SubmissionListSerializer(serializers.ModelSerializer):
@@ -31,8 +31,8 @@ class SubmissionListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Submission
         fields = ("pk", "status", "description", "approx_bats", "submission_time",
-                  "photo_taken_time", "images", "latitude", "longitude")
-        read_only_fields = ["pk", "images"]
+                  "photo_taken_time", "images", "latitude", "longitude", "review")
+        read_only_fields = ["pk", "images", "review"]
 
 
 class SubmissionDetailSerializer(serializers.ModelSerializer):
@@ -41,7 +41,10 @@ class SubmissionDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Submission
         fields = ("pk", "status", "description", "approx_bats", "submission_time",
-                  "photo_taken_time",  "images",  "latitude", "longitude")
+                  "photo_taken_time",  "images",  "latitude", "longitude", "review")
+        read_only_fields = ["pk", "images", "review"]
+                  
+
 
 
 class SpeciesSerializer(serializers.ModelSerializer):

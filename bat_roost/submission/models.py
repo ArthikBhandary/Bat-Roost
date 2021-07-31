@@ -44,6 +44,7 @@ class Submission(gmodels.Model):
     approx_bats = gmodels.PositiveIntegerField()
     submission_time = gmodels.DateTimeField(auto_now_add=True)
     rejected_time = gmodels.DateTimeField(blank=True, null=True)
+    review = gmodels.TextField(blank=True)
     photo_taken_time = gmodels.DateTimeField()
     location = gmodels.PointField()
     species = models.ManyToManyField(Species, related_name="submission")

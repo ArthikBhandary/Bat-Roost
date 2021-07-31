@@ -102,10 +102,10 @@ SITE_ID = 1
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'agricom',
+        'NAME': 'postgres',
         'USER': 'postgres',
         'HOST': 'localhost',
-        'PASSWORD': 'newPassword',
+        'PASSWORD': 'password',
         'PORT': '5432',
     }
 }
@@ -157,9 +157,10 @@ STATICFILES_DIRS = [
 ]
 
 #Media files
+MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR,'media/')
-MEDIA_URL = '/media/'
+
 LOGIN_URL = '/login/'
 
 LOGIN_REDIRECT_URL = 'submission:AllSubmissionView'

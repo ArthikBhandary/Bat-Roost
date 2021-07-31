@@ -5,6 +5,7 @@ $(document).ready(function(){
 
     $(".accept-submission").on("click", function(){
         let id=$(this).data("id");
+        let review=$("#review").val();
         $("#action"+id).html(preloader);
         $.ajax({
             type: 'POST',
@@ -13,6 +14,7 @@ $(document).ready(function(){
                 "id":id,
                 "csrfmiddlewaretoken":csrf_token,
                 "status":"AC",
+                "review":review,
             },
             datatype: 'json',
             success: function(response){
@@ -20,6 +22,7 @@ $(document).ready(function(){
                if(response.success==true){
                    $("#action"+id).empty();
                    $("#status"+id).text(response.status_display);
+                   location.reload(true);
                }
                else{
                    console.log("Failed");
@@ -30,6 +33,7 @@ $(document).ready(function(){
 
     $(".reject-submission").on("click", function(){
         let id=$(this).data("id");
+        let review=$("#review").val();
         $("#action"+id).html(preloader);
         $.ajax({
             type: 'POST',
@@ -38,6 +42,7 @@ $(document).ready(function(){
                 "id":id,
                 "csrfmiddlewaretoken":csrf_token,
                 "status":"RJ",
+                "review":review,
             },
             datatype: 'json',
             success: function(response){
@@ -45,6 +50,7 @@ $(document).ready(function(){
                 if(response.success==true){
                     $("#action"+id).empty();
                     $("#status"+id).text(response.status_display);
+                    location.reload(true);
                 }
                 else{
                 }

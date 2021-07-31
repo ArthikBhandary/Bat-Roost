@@ -24,19 +24,14 @@
     <nav class="teal accent-3">
         <div class="nav-wrapper teal accent-3 ">
             <a href="#" data-target="mobile-nav" class="sidenav-trigger left"><i class="material-icons">menu</i></a>
-            <a href="#" class="brand-logo ">
+            <a href="{% url 'submission:AllSubmissionView' %}" class="brand-logo ">
                 <img src="{% static 'img/bcit_logo_with_text.png' %}" alt="logo" style="height:64px">
             </a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 <li>
                     <a class="nav-link black-text" href="{% url 'submission:AllSubmissionView' %}">All Submission</a>
                 </li>
-                <!-- <li class="nav-item">
-                  <a class="nav-link black-text" href="{% url 'submission:AcceptedSubmissionView' %}">Accepted</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link black-text" href="{% url 'submission:ReviewSubmissionView'%}">Under Review</a>
-                </li> -->
+
                 <li class="nav-item">
                   <a class="nav-link black-text" href="{% url 'submission:DownloadSubmission' %}">DownloadCSV</a>
                 </li>
@@ -45,23 +40,10 @@
                 </li>
             </ul>
         </div>
-        
+
     </nav>
-   
-    
 
 
-    <!-- <ul class="sidenav teal accent-1" id="mobile-nav">
-        <li>
-            <a class="nav-link black-text" href="{% url 'submission:AllSubmissionView' %}">All Submission</a>
-        </li>
-        <li class="nav-item active">
-          <a class="nav-link black-text" href="{% url 'submission:AcceptedSubmissionView' %}">Accepted</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link black-text" href="{% url 'submission:ReviewSubmissionView'%}">Under Review</a>
-        </li>
-    </ul> -->
     <div class=''>
         {% block body_block %}
         {% endblock %}

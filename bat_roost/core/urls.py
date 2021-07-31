@@ -1,4 +1,6 @@
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 from core.views import AdminLoginView, ThanksView, test_view
 
@@ -13,4 +15,4 @@ urlpatterns = [
     path(endpoint, include('core.api.urls')),
     path(endpoint + "submission/", include('submission.api.urls')),
     path("test",test_view.as_view(), name="test")
-]
+]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
