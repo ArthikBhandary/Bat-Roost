@@ -9,4 +9,5 @@ urlpatterns = [
     path("create/", views.SubmissionCreateAPIView.as_view(), name="create"),
     path("details/", views.SubmissionDetailApiView.as_view(), name="details"),
     path("download/", views.SubmissionListDownloadApiView.as_view(), name="details"),
+    path("species_list/", views.SpeciesApiView.as_view(), name="species_list")
 ]

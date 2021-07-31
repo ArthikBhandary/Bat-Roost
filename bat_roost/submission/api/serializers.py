@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from submission.models import Submission, SubmissionImage
+from submission.models import Submission, SubmissionImage, Species
 
 
 class ImageCreateSerializer(serializers.ModelSerializer):
@@ -16,21 +16,35 @@ class ImageSerializer(serializers.ModelSerializer):
 
 
 class SubmissionSerializer(serializers.ModelSerializer):
-    images = ImageSerializer(read_only=True,many=True)
+    images = ImageSerializer(read_only=True, many=True)
+
     class Meta:
         model = Submission
-        fields = ("pk", "description", "approx_bats", "photo_taken_time", "images")
-        read_only_fields = ["pk", "images"]
+        fields = ("pk", "description", "approx_bats",
+                  "photo_taken_time", "images",  "latitude", "longitude")
+        read_only_fields = ["pk", "images",  "latitude", "longitude"]
 
 
 class SubmissionListSerializer(serializers.ModelSerializer):
+    images = ImageSerializer(read_only=True, many=True)
+
     class Meta:
         model = Submission
-        fields = ("pk", "status", "description", "approx_bats", "submission_time", "photo_taken_time")
+        fields = ("pk", "status", "description", "approx_bats", "submission_time",
+                  "photo_taken_time", "images", "latitude", "longitude")
+        read_only_fields = ["pk", "images"]
 
 
 class SubmissionDetailSerializer(serializers.ModelSerializer):
-    images = ImageSerializer(read_only=True,many=True)
+    images = ImageSerializer(read_only=True, many=True)
+
     class Meta:
         model = Submission
-        fields = ("pk", "status", "description", "approx_bats", "submission_time", "photo_taken_time",  "images",)
+        fields = ("pk", "status", "description", "approx_bats", "submission_time",
+                  "photo_taken_time",  "images",  "latitude", "longitude")
+
+
+class SpeciesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Species
+        fields = ("pk", "name")
