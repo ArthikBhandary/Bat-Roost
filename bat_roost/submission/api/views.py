@@ -53,11 +53,12 @@ class SubmissionCreateAPIView(CreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer, **kwargs):
+        print(self.request.data)
         serializer.is_valid(raise_exception=True)
         point = Point(x=kwargs["latitude"], y=kwargs["longitude"])
         obj = serializer.save(user=self.request.user, location=point)
         id = obj.id
-        images = dict((self.request.data).lists())['image']
+        images = dict((self.request.data).lists())['images']
         flag = 1
         arr = []
         if kwargs.get("species_id"):
