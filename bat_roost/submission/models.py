@@ -47,7 +47,7 @@ class Submission(gmodels.Model):
     review = gmodels.TextField(blank=True)
     photo_taken_time = gmodels.DateTimeField()
     location = gmodels.PointField()
-    species = models.ManyToManyField(Species, related_name="submission")
+    species = models.ManyToManyField(Species, related_name="submission", blank=True)
 
     objects = gmodels.Manager()
 
@@ -58,6 +58,9 @@ class Submission(gmodels.Model):
     @property
     def longitude(self):
         return self.location.y
+
+    def get_all_species_string(self):
+        return ", ".join(str(specie.name) for specie in self.species.all())
 
     def __str__(self):
         return str(self.pk) + " " + self.get_status_display()

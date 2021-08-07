@@ -31,28 +31,26 @@ class AllSubmissionView(IsUserAdminTestMixin, ListView):
     paginate_by = 9
     template_name = 'submission/all_sub.html'
 
-    # def get_queryset(self, *args, **kwargs):
-    #     if self.request.GET.get('Accepted'):
-
-    #         return Submission.objects.filter(status=Submission.ACCEPTED)
-
-    #     elif self.request.GET.get('UnderReview'):
-    #         return Submission.objects.filter(status=Submission.UNDER_REVIEW)
-    #     return Submission.objects.all()
-
-
     def get_context_data(self, **kwargs):
         context = super(AllSubmissionView, self).get_context_data(**kwargs)
         #submission_list = self.get_queryset()
         submission_list =  Submission.objects.all()
-        print(self.request.GET)
+        context["filter_status"] = self.request.GET.get("status")
         if self.request.GET.get("status")=="Accepted":
             submission_list =  submission_list.filter(status=Submission.ACCEPTED)
         if self.request.GET.get("status")=="UnderReview":
             submission_list =  submission_list.filter(status=Submission.UNDER_REVIEW)
-        pk = self.request.GET.get("pk")
-        if  pk:
-            submission_list = submission_list.filter(pk=pk)
+
+        try:
+            pk = int(self.request.GET.get("pk"))
+            context["filter_pk"] = pk
+            if pk:
+                submission_list = submission_list.filter(user__pk=pk)
+        except:
+            #do nothing
+            submission_list = submission_list
+            context["filter_pk"] = ""
+        context["filter_group1"] = self.request.GET.get("group1")
         if self.request.GET.get("group1")=="st":
             submission_list = submission_list.order_by("submission_time")
         if self.request.GET.get("group1")=="pt":
@@ -118,15 +116,36 @@ class StatusView(IsUserAdminTestMixin, View):
 
 
 def DownloadSubmission(request):
-    items = Submission.objects.filter(status=Submission.ACCEPTED)
+    submission_list =  Submission.objects.all()
+    if request.GET.get("status")=="Accepted":
+        submission_list =  submission_list.filter(status=Submission.ACCEPTED)
+    if request.GET.get("status")=="UnderReview":
+        submission_list =  submission_list.filter(status=Submission.UNDER_REVIEW)
+    try:
+        pk = int(request.GET.get("pk"))
+        if pk:
+            submission_list = submission_list.filter(user__pk=pk)
+    except:
+        #do nothing
+        submission_list = submission_list
+    if request.GET.get("group1")=="st":
+        submission_list = submission_list.order_by("submission_time")
+    if request.GET.get("group1")=="pt":
+        submission_list = submission_list.order_by("photo_taken_time")
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="submission.csv"'
     writer = csv.writer(response, delimiter=',')
+
     writer.writerow(['user', 'description', 'approx_bats',
-                     'submission_time', 'photo_taken_time'])
-    for obj in items:
-        writer.writerow([obj.user, obj.description, obj.approx_bats,
-                         obj.submission_time, obj.photo_taken_time])
+                     'submission_time', 'photo_taken_time', 'status', 'latitude', 'longitude', 'species', 'image1', 'image2', 'image3', 'image4', 'image5'])
+    for obj in submission_list:
+        species_string = ", ".join(str(specie.name) for specie in obj.species.all())
+
+        row_to_add = [obj.user, obj.description, obj.approx_bats,
+                         obj.submission_time, obj.photo_taken_time, obj.status, obj.latitude, obj.longitude, species_string ]
+        for image in obj.images.all():
+            row_to_add.append(request.build_absolute_uri(image.image.url))
+        writer.writerow(row_to_add)
     return response
 
 class LocationView(TemplateView):

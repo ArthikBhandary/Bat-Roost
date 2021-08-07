@@ -33,7 +33,7 @@
                 </li>
 
                 <li class="nav-item">
-                  <a class="nav-link black-text" href="{% url 'submission:DownloadSubmission' %}">DownloadCSV</a>
+                  <a class="nav-link black-text" href="{% url 'submission:DownloadSubmission' %}?status={{ filter_status }}&pk={{ filter_pk }}&group1={{ filter_group1 }}">DownloadCSV</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link black-text" href="{% url 'submission:loc' %}">All locations</a>

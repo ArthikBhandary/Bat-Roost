@@ -38,7 +38,7 @@ class SubmissionCreateAPIView(CreateAPIView):
             try:
                 species_list = json.loads(self.request.data.get("species"))
                 if type(species_list) is not list:
-                    return Response("Invalid Values for species. NotL", status=status.HTTP_400_BAD_REQUEST)
+                    return Response("Invalid Values for species. Not a List", status=status.HTTP_400_BAD_REQUEST)
 
                 species_id = [int(x) for x in species_list]
             except ValueError as e:

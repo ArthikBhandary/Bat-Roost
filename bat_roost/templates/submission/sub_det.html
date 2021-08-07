@@ -67,6 +67,10 @@ Submissions
                 <td colspan="1">PHOTO TAKEN TIME</td>
                 <td colspan="3">{{submission.photo_taken_time}}</td>
             </tr>
+            <tr>
+                <td colspan="1">SPECIES</td>
+                <td colspan="3">{{ submission.get_all_species_string }}</td>
+            </tr>
             {% if submission.review %}
                 <tr>
                     <td colspan="1">Review/Comments</td>

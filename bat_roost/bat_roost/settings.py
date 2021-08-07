@@ -109,6 +109,14 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'mapabatroost',
+# 	'USER': 'mapabatroost',
+# 	'PASSWORD': 'password',
+#     }
+# }
 
 
 # Password validation
@@ -199,3 +207,8 @@ ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION ="mandatory"
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
+
+LEAFLET_CONFIG = {
+    'TILES': [("default", 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+     {'attribution':"attribution", 'noWrap': True,'maxBoundsViscosity': 1})]
+}

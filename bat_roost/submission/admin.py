@@ -2,10 +2,12 @@ from django.contrib import admin
 from .models import Submission, SubmissionImage, Species
 from leaflet.admin import LeafletGeoAdmin
 
-class SubmissionAdmin(LeafletGeoAdmin):
-    list_display=('user','location')
 
-admin.site.register(Submission,SubmissionAdmin)
+class SubmissionAdmin(LeafletGeoAdmin):
+    list_display = ('user', 'location')
+
+
+admin.site.register(Submission, SubmissionAdmin)
 
 admin.site.register(SubmissionImage)
 
