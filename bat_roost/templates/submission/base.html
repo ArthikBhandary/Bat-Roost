@@ -33,8 +33,13 @@
                 </li>
 
                 <li class="nav-item">
-                  <a class="nav-link black-text" href="{% url 'submission:DownloadSubmission' %}?status={{ filter_status }}&pk={{ filter_pk }}&group1={{ filter_group1 }}">DownloadCSV</a>
+                  <a class="nav-link black-text" href="{% url 'submission:DownloadSubmission' %}?{{ search_params }}">DownloadCSV</a>
                 </li>
+                {% if search_params %}
+                   <li class="nav-item">
+                      <a class="nav-link black-text" href="{% url 'submission:loc' %}?{{ search_params }}">Filtered locations</a>
+                    </li>
+                {% endif %}
                 <li class="nav-item">
                   <a class="nav-link black-text" href="{% url 'submission:loc' %}">All locations</a>
                 </li>

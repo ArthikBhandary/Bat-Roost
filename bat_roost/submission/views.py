@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponse
 from django.views.generic.base import TemplateView
-from submission.models import Submission, SubmissionImage
+from submission.models import Submission, SubmissionImage, Species
 from django.views import View
 from django.views.generic import ListView, DetailView
 from django.http import JsonResponse
@@ -12,15 +12,17 @@ import csv
 import json
 from django.core.serializers import serialize
 from core.permission import IsUserAdminTestMixin
+from core.misc_functions import is_int_convertible
 
 
 class AllsubmissionDetails(IsUserAdminTestMixin, DetailView):
     model = Submission
     template_name = "submission/sub_det.html"
+
     def get_context_data(self, **kwargs):
         """Return the view context data."""
         context = super().get_context_data(**kwargs)
-        pk  = self.kwargs.get('pk')
+        pk = self.kwargs.get('pk')
         context["markers"] = json.loads(serialize("geojson", Submission.objects.filter(pk=pk)))
         context["domain"] = self.request.META['HTTP_HOST']
         return context
@@ -28,47 +30,56 @@ class AllsubmissionDetails(IsUserAdminTestMixin, DetailView):
 
 class AllSubmissionView(IsUserAdminTestMixin, ListView):
     model = Submission
-    paginate_by = 9
+    paginate_no = 10
     template_name = 'submission/all_sub.html'
 
     def get_context_data(self, **kwargs):
+        search_params = ""
         context = super(AllSubmissionView, self).get_context_data(**kwargs)
-        #submission_list = self.get_queryset()
-        submission_list =  Submission.objects.all()
+        # submission_list = self.get_queryset()
+        submission_list = Submission.objects.all()
         context["filter_status"] = self.request.GET.get("status")
-        if self.request.GET.get("status")=="Accepted":
-            submission_list =  submission_list.filter(status=Submission.ACCEPTED)
-        if self.request.GET.get("status")=="UnderReview":
-            submission_list =  submission_list.filter(status=Submission.UNDER_REVIEW)
-
-        try:
-            pk = int(self.request.GET.get("pk"))
+        if self.request.GET.get("status") == "Accepted":
+            submission_list = submission_list.filter(status=Submission.ACCEPTED)
+            search_params += "status=Accepted&"
+        if self.request.GET.get("status") == "UnderReview":
+            submission_list = submission_list.filter(status=Submission.UNDER_REVIEW)
+            search_params += "status=UnderReview&"
+        pk = self.request.GET.get("pk")
+        if is_int_convertible(pk):
+            submission_list = submission_list.filter(user__pk=pk)
             context["filter_pk"] = pk
-            if pk:
-                submission_list = submission_list.filter(user__pk=pk)
-        except:
-            #do nothing
-            submission_list = submission_list
-            context["filter_pk"] = ""
-        context["filter_group1"] = self.request.GET.get("group1")
-        if self.request.GET.get("group1")=="st":
-            submission_list = submission_list.order_by("submission_time")
-        if self.request.GET.get("group1")=="pt":
-            submission_list = submission_list.order_by("photo_taken_time")
+            search_params += ("pk=" + pk + "&")
+        group1 = self.request.GET.get("group1")
+        context["filter_group1"] = group1
+        if group1:
+            search_params += "group1={param}&".format(param=group1)
+            if group1 == "st":
+                submission_list = submission_list.order_by("submission_time")
+            if group1 == "pt":
+                submission_list = submission_list.order_by("photo_taken_time")
 
+        species_id = self.request.GET.get("species")
+        if is_int_convertible(species_id):
+            submission_list = submission_list.filter(species__id=species_id)
+            context["species"] = species_id
+            search_params += "species={param}&".format(param=species_id)
+        context["search_params"] = search_params
+        context["species_list"] = Species.objects.all()
 
-        paginator = Paginator(submission_list, self.paginate_by)
-
+        paginator = Paginator(submission_list, self.paginate_no)
+        if paginator.num_pages > 1:
+            context["is_paginated"] = True
         page = self.request.GET.get('page')
-
         try:
-            Submissions = paginator.page(page)
+            submissions = paginator.page(page)
         except PageNotAnInteger:
-            Submissions = paginator.page(1)
+            submissions = paginator.page(1)
         except EmptyPage:
-            Submissions = paginator.page(paginator.num_pages)
+            submissions = paginator.page(paginator.num_pages)
 
-        context['submission_list'] = Submissions
+        context['submission_list'] = submissions
+        context['page_obj'] = submissions
         return context
 
 
@@ -116,44 +127,65 @@ class StatusView(IsUserAdminTestMixin, View):
 
 
 def DownloadSubmission(request):
-    submission_list =  Submission.objects.all()
-    if request.GET.get("status")=="Accepted":
-        submission_list =  submission_list.filter(status=Submission.ACCEPTED)
-    if request.GET.get("status")=="UnderReview":
-        submission_list =  submission_list.filter(status=Submission.UNDER_REVIEW)
-    try:
-        pk = int(request.GET.get("pk"))
-        if pk:
-            submission_list = submission_list.filter(user__pk=pk)
-    except:
-        #do nothing
-        submission_list = submission_list
-    if request.GET.get("group1")=="st":
+    submission_list = Submission.objects.all()
+    if request.GET.get("status") == "Accepted":
+        submission_list = submission_list.filter(status=Submission.ACCEPTED)
+    if request.GET.get("status") == "UnderReview":
+        submission_list = submission_list.filter(status=Submission.UNDER_REVIEW)
+    pk = request.GET.get("pk")
+    if is_int_convertible(pk):
+        submission_list = submission_list.filter(user__pk=pk)
+    if request.GET.get("group1") == "st":
         submission_list = submission_list.order_by("submission_time")
-    if request.GET.get("group1")=="pt":
+    if request.GET.get("group1") == "pt":
         submission_list = submission_list.order_by("photo_taken_time")
+    species_id = request.GET.get("species")
+    if is_int_convertible(species_id):
+        submission_list = submission_list.filter(species__id=species_id)
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="submission.csv"'
     writer = csv.writer(response, delimiter=',')
 
     writer.writerow(['user', 'description', 'approx_bats',
-                     'submission_time', 'photo_taken_time', 'status', 'latitude', 'longitude', 'species', 'image1', 'image2', 'image3', 'image4', 'image5'])
+                     'submission_time', 'photo_taken_time', 'status', 'latitude', 'longitude', 'species', 'image1',
+                     'image2', 'image3', 'image4', 'image5'])
     for obj in submission_list:
         species_string = ", ".join(str(specie.name) for specie in obj.species.all())
 
         row_to_add = [obj.user, obj.description, obj.approx_bats,
-                         obj.submission_time, obj.photo_taken_time, obj.status, obj.latitude, obj.longitude, species_string ]
+                      obj.submission_time, obj.photo_taken_time, obj.status, obj.latitude, obj.longitude,
+                      species_string]
         for image in obj.images.all():
             row_to_add.append(request.build_absolute_uri(image.image.url))
         writer.writerow(row_to_add)
     return response
 
+
 class LocationView(TemplateView):
-     model = Submission
-     template_name = 'submission/loc.html'
-     def get_context_data(self, **kwargs):
+    model = Submission
+    template_name = 'submission/loc.html'
+
+    def get_context_data(self, **kwargs):
         """Return the view context data."""
         context = super().get_context_data(**kwargs)
-        context["markers"] = json.loads(serialize("geojson", Submission.objects.all()))
+        submission_list = Submission.objects.all()
+        if self.request.GET.get("status") == "Accepted":
+            submission_list = submission_list.filter(status=Submission.ACCEPTED)
+        if self.request.GET.get("status") == "UnderReview":
+            submission_list = submission_list.filter(status=Submission.UNDER_REVIEW)
+        pk = self.request.GET.get("pk")
+        if is_int_convertible(pk):
+            submission_list = submission_list.filter(user__pk=pk)
+        group1 = self.request.GET.get("group1")
+        if group1:
+            if group1 == "st":
+                submission_list = submission_list.order_by("submission_time")
+            if group1 == "pt":
+                submission_list = submission_list.order_by("photo_taken_time")
+
+        species_id = self.request.GET.get("species")
+        if is_int_convertible(species_id):
+            submission_list = submission_list.filter(species__id=species_id)
+        context["markers"] = json.loads(serialize("geojson", submission_list))
         context["domain"] = self.request.META['HTTP_HOST']
         return context
