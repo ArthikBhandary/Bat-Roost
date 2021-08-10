@@ -143,7 +143,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
@@ -209,6 +209,9 @@ ACCOUNT_EMAIL_VERIFICATION ="mandatory"
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
 
 LEAFLET_CONFIG = {
+    'DEFAULT_CENTER': (20.5, 79),
+    'DEFAULT_ZOOM': 4,
+
     'TILES': [("default", 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-     {'attribution':"attribution", 'noWrap': True,'maxBoundsViscosity': 1})]
+     {'attribution':'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', 'noWrap': True,'maxBoundsViscosity': 1 })]
 }
