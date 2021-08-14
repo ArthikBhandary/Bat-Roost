@@ -15,7 +15,7 @@ from core.permission import IsUserAdminTestMixin
 from core.misc_functions import is_int_convertible
 
 
-class AllsubmissionDetails(IsUserAdminTestMixin, DetailView):
+class AllSubmissionDetails(IsUserAdminTestMixin, DetailView):
     model = Submission
     template_name = "submission/sub_det.html"
 
@@ -61,7 +61,11 @@ class AllSubmissionView(IsUserAdminTestMixin, ListView):
 
         species_id = self.request.GET.get("species")
         if is_int_convertible(species_id):
-            submission_list = submission_list.filter(species__id=species_id)
+            if int(species_id) == -1:
+                # Get submissions with unidentified species
+                submission_list = submission_list.filter(species=None)
+            else:
+                submission_list = submission_list.filter(species__id=species_id)
             context["species"] = species_id
             search_params += "species={param}&".format(param=species_id)
         context["search_params"] = search_params
@@ -141,7 +145,11 @@ def DownloadSubmission(request):
         submission_list = submission_list.order_by("photo_taken_time")
     species_id = request.GET.get("species")
     if is_int_convertible(species_id):
-        submission_list = submission_list.filter(species__id=species_id)
+        if int(species_id) == -1:
+            # Get submissions with unidentified species
+            submission_list = submission_list.filter(species=None)
+        else:
+            submission_list = submission_list.filter(species__id=species_id)
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="submission.csv"'
     writer = csv.writer(response, delimiter=',')
@@ -185,7 +193,11 @@ class LocationView(TemplateView):
 
         species_id = self.request.GET.get("species")
         if is_int_convertible(species_id):
-            submission_list = submission_list.filter(species__id=species_id)
+            if int(species_id) == -1:
+                # Get submissions with unidentified species
+                submission_list = submission_list.filter(species=None)
+            else:
+                submission_list = submission_list.filter(species__id=species_id)
         context["markers"] = json.loads(serialize("geojson", submission_list))
         context["domain"] = self.request.META['HTTP_HOST']
         return context
