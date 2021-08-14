@@ -29,9 +29,9 @@ class SubmissionCreateAPIView(CreateAPIView):
             return Response("Invalid Values for position", status=status.HTTP_400_BAD_REQUEST)
 
         species_id = []
-        if self.request.data.get("species"):
+        if self.request.data.get("species", ):
             try:
-                species_list = json.loads(self.request.data.get("species"))
+                species_list = json.loads(self.request.data.get("species", ))
                 if type(species_list) is not list:
                     return Response("Invalid Values for species. Not a List", status=status.HTTP_400_BAD_REQUEST)
 
@@ -52,18 +52,17 @@ class SubmissionCreateAPIView(CreateAPIView):
         serializer.is_valid(raise_exception=True)
         point = Point(x=kwargs["longitude"], y=kwargs["latitude"])
         obj = serializer.save(user=self.request.user, location=point)
-        id = obj.id
-        images = dict((self.request.data).lists())['images']
-        flag = 1
+        obj_id = obj.id
+        images = dict(self.request.data.lists())['images']
         arr = []
         if kwargs.get("species_id"):
             species_id = kwargs["species_id"]
-            currentSpecie = Species.objects.filter(pk__in=species_id)
-            for specie in currentSpecie:
+            current_specie = Species.objects.filter(pk__in=species_id)
+            for specie in current_specie:
                 obj.species.add(specie)
 
         for img_name in images:
-            modified_data = modify_input_for_multiple_files(id,
+            modified_data = modify_input_for_multiple_files(obj_id,
                                                             img_name)
             file_serializer = ImageCreateSerializer(data=modified_data)
             if file_serializer.is_valid(raise_exception=True):
@@ -92,13 +91,13 @@ class SubmissionDetailApiView(RetrieveAPIView):
     serializer_class = SubmissionSerializer
 
     def get_object(self):
-        return get_object_or_404(Submission, pk=self.request.GET.get("pk"))
+        return get_object_or_404(Submission, pk=self.request.GET.get("pk", ))
 
 
 class SubmissionListDownloadApiView(ListAPIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
+    def get(self, request, **kwargs):
         items = Submission.objects.filter(
             status=Submission.ACCEPTED, user=request.user)
         response = HttpResponse(content_type='text/csv')
@@ -115,7 +114,5 @@ class SubmissionListDownloadApiView(ListAPIView):
 
 
 def modify_input_for_multiple_files(property_id, image):
-    dict = {}
-    dict['submission'] = property_id
-    dict['image'] = image
+    dict = {'submission': property_id, 'image': image}
     return dict
