@@ -9,6 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import authenticate
 from core.models import User
 
+
 class UserDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -23,20 +24,26 @@ class UserDataSerializer(serializers.ModelSerializer):
 #         return auth
 
 
-
 class RegistrationSerializer(RegisterSerializer):
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=False)
-    contact_no = serializers.CharField(required=False, max_length=12)
-    locality = serializers.CharField(required=False, max_length=255)
+    contact_no = serializers.CharField(required=True, max_length=12)
+    locality = serializers.CharField(required=True, max_length=255)
 
     def get_cleaned_data(self):
         return {
-            'first_name': self.validated_data.get('first_name', ''),
-            'last_name': self.validated_data.get('last_name', ''),
-            'contact_no': self.validated_data.get('first_name', ''),
-            'locality': self.validated_data.get('last_name', ''),
-            'username': self.validated_data.get('username', ''),
-            'password1': self.validated_data.get('password1', ''),
-            'email': self.validated_data.get('email', '')
+            'first_name': self.validated_data.get('first_name', ),
+            'last_name': self.validated_data.get('last_name', ),
+            'contact_no': self.validated_data.get('contact_no', ),
+            'locality': self.validated_data.get('locality', ),
+            'username': self.validated_data.get('username', ),
+            'password1': self.validated_data.get('password1', ),
+            'email': self.validated_data.get('email', )
         }
+
+    def save(self, request):
+        user = super().save(request)
+        user.contact_no = self.cleaned_data.get('contact_no', )
+        user.locality = self.cleaned_data.get("locality", )
+        user.save()
+        return user
