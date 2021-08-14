@@ -4,7 +4,7 @@ from leaflet.admin import LeafletGeoAdmin
 
 
 class SubmissionAdmin(LeafletGeoAdmin):
-    list_display = ('user', 'location')
+    list_display = ('pk', 'user', 'status')
 
 
 admin.site.register(Submission, SubmissionAdmin)
