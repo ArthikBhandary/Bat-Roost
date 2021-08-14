@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = 'enter_your_secret_key_a33ib@jb5nc49'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -79,7 +77,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR,'templates'),
+            os.path.join(BASE_DIR, 'templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -137,7 +135,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -151,7 +148,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
@@ -161,13 +157,13 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR,'static')
+    os.path.join(BASE_DIR, 'static')
 ]
 
-#Media files
+# Media files
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR,'media/')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 LOGIN_URL = '/login/'
 
@@ -176,19 +172,16 @@ LOGIN_REDIRECT_URL = 'submission:AllSubmissionView'
 # MAILER_EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 # EMAIL_BACKEND = "mailer.backend.DbBackend"
-EMAIL_BACKEND  = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 # EMAIL_USE_SSL = True
 EMAIL_PORT = 587
-#password associated with above email-id
+# password associated with above email-id
 EMAIL_HOST_USER = 'example@email.com'
-EMAIL_HOST_PASSWORD = 'password'#password associated with above email-id
+EMAIL_HOST_PASSWORD = 'password'  # password associated with above email-id
 
-
-DEFAULT_AUTO_FIELD='django.db.models.AutoField'
-
-
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'core.api.serializers.RegistrationSerializer'
@@ -202,16 +195,20 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
 }
 
-
 ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION ="mandatory"
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = "core.email_confirmed"
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = "core.email_confirmed"
+ACCOUNT_EMAIL_CONFIRMATION_COOLDOWN = 180
 
 LEAFLET_CONFIG = {
     'DEFAULT_CENTER': (20.5, 79),
     'DEFAULT_ZOOM': 4,
 
     'TILES': [("default", 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-     {'attribution':'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', 'noWrap': True,'maxBoundsViscosity': 1 })]
+               {
+                   'attribution': '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                   'noWrap': True, 'maxBoundsViscosity': 1})]
 }

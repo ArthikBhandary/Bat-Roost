@@ -1,0 +1,38 @@
+{% load account %}
+{% load i18n %}
+
+{% block content %}
+{% autoescape off %}
+{% user_display user as user_display %}
+{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}
+Dear {{ user_display }},
+
+Welcome to Map a Bat Roost member community and thanks for joining us on this citizen science initiative.
+
+To complete your registration and activate your member account, please click this link or copy it into your browser:
+
+{{ activate_url }}
+
+The activation link can be used only once.
+
+You're receiving this e-mail because user {{ user_display }} has given your e-mail address to register an account on {{ site_domain }}.
+
+To confirm this is correct, go to {{ activate_url }}
+
+You will need to use your email ID to login to the Map a Bat Roost app in the future.
+
+If you have any question, please don’t hesitate to get in touch at example@email.com.
+
+We look forward to seeing your contribution to map the bat roosts across India and help us monitor them.
+
+
+Thank you for using Map a Bat Roost
+
+Bat Conservation India Trust
+
+{% endblocktrans %}{% endautoescape %}{% endblock %}
+
+
+
+
+

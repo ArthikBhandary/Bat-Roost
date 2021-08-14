@@ -21,12 +21,5 @@ class ThanksView(LoginRequiredMixin, View):
         return HttpResponse("Thanks " + request.user.username)
 
 
-class test_view(TemplateView):
-    template_name="test.html"
-
-    def get_context_data(self, **kwargs):
-        context = super(test_view, self).get_context_data(**kwargs)
-        context.update({
-            "test":"yeah"
-        })
-        return context
+class EmailConfirmedView(TemplateView):
+    template_name="core/email_confirmed.html"
