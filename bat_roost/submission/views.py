@@ -38,19 +38,19 @@ class AllSubmissionView(IsUserAdminTestMixin, ListView):
         context = super(AllSubmissionView, self).get_context_data(**kwargs)
         # submission_list = self.get_queryset()
         submission_list = Submission.objects.all()
-        context["filter_status"] = self.request.GET.get("status")
-        if self.request.GET.get("status") == "Accepted":
+        context["filter_status"] = self.request.GET.get("status", )
+        if self.request.GET.get("status", ) == "Accepted":
             submission_list = submission_list.filter(status=Submission.ACCEPTED)
             search_params += "status=Accepted&"
-        if self.request.GET.get("status") == "UnderReview":
+        if self.request.GET.get("status", ) == "UnderReview":
             submission_list = submission_list.filter(status=Submission.UNDER_REVIEW)
             search_params += "status=UnderReview&"
-        pk = self.request.GET.get("pk")
+        pk = self.request.GET.get("pk", )
         if is_int_convertible(pk):
             submission_list = submission_list.filter(user__pk=pk)
             context["filter_pk"] = pk
             search_params += ("pk=" + pk + "&")
-        group1 = self.request.GET.get("group1")
+        group1 = self.request.GET.get("group1", )
         context["filter_group1"] = group1
         if group1:
             search_params += "group1={param}&".format(param=group1)
@@ -59,7 +59,7 @@ class AllSubmissionView(IsUserAdminTestMixin, ListView):
             if group1 == "pt":
                 submission_list = submission_list.order_by("photo_taken_time")
 
-        species_id = self.request.GET.get("species")
+        species_id = self.request.GET.get("species", )
         if is_int_convertible(species_id):
             if int(species_id) == -1:
                 # Get submissions with unidentified species
@@ -74,7 +74,7 @@ class AllSubmissionView(IsUserAdminTestMixin, ListView):
         paginator = Paginator(submission_list, self.paginate_no)
         if paginator.num_pages > 1:
             context["is_paginated"] = True
-        page = self.request.GET.get('page')
+        page = self.request.GET.get('page', )
         try:
             submissions = paginator.page(page)
         except PageNotAnInteger:
@@ -103,7 +103,7 @@ class ReviewSubmissionView(AllSubmissionView):
 
 class StatusView(IsUserAdminTestMixin, View):
     def get(self, request):
-        obj = get_object_or_404(Submission, id=request.GET.get("id"))
+        obj = get_object_or_404(Submission, id=request.GET.get("id", ))
         return JsonResponse({
             "id": obj.id,
             "status": obj.status,
@@ -111,9 +111,9 @@ class StatusView(IsUserAdminTestMixin, View):
         })
 
     def post(self, request):
-        obj = get_object_or_404(Submission, id=request.POST.get("id"))
-        status = request.POST.get("status")
-        review = request.POST.get("review")
+        obj = get_object_or_404(Submission, id=request.POST.get("id", ))
+        status = request.POST.get("status", )
+        review = request.POST.get("review", )
         if not Submission.is_valid_status(status):
             return JsonResponse({
                 "success": False,
@@ -132,18 +132,18 @@ class StatusView(IsUserAdminTestMixin, View):
 
 def DownloadSubmission(request):
     submission_list = Submission.objects.all()
-    if request.GET.get("status") == "Accepted":
+    if request.GET.get("status", ) == "Accepted":
         submission_list = submission_list.filter(status=Submission.ACCEPTED)
-    if request.GET.get("status") == "UnderReview":
+    if request.GET.get("status", ) == "UnderReview":
         submission_list = submission_list.filter(status=Submission.UNDER_REVIEW)
-    pk = request.GET.get("pk")
+    pk = request.GET.get("pk", )
     if is_int_convertible(pk):
         submission_list = submission_list.filter(user__pk=pk)
-    if request.GET.get("group1") == "st":
+    if request.GET.get("group1", ) == "st":
         submission_list = submission_list.order_by("submission_time")
-    if request.GET.get("group1") == "pt":
+    if request.GET.get("group1", ) == "pt":
         submission_list = submission_list.order_by("photo_taken_time")
-    species_id = request.GET.get("species")
+    species_id = request.GET.get("species", )
     if is_int_convertible(species_id):
         if int(species_id) == -1:
             # Get submissions with unidentified species
@@ -177,21 +177,21 @@ class LocationView(TemplateView):
         """Return the view context data."""
         context = super().get_context_data(**kwargs)
         submission_list = Submission.objects.all()
-        if self.request.GET.get("status") == "Accepted":
+        if self.request.GET.get("status", ) == "Accepted":
             submission_list = submission_list.filter(status=Submission.ACCEPTED)
-        if self.request.GET.get("status") == "UnderReview":
+        if self.request.GET.get("status", ) == "UnderReview":
             submission_list = submission_list.filter(status=Submission.UNDER_REVIEW)
-        pk = self.request.GET.get("pk")
+        pk = self.request.GET.get("pk", )
         if is_int_convertible(pk):
             submission_list = submission_list.filter(user__pk=pk)
-        group1 = self.request.GET.get("group1")
+        group1 = self.request.GET.get("group1", )
         if group1:
             if group1 == "st":
                 submission_list = submission_list.order_by("submission_time")
             if group1 == "pt":
                 submission_list = submission_list.order_by("photo_taken_time")
 
-        species_id = self.request.GET.get("species")
+        species_id = self.request.GET.get("species", )
         if is_int_convertible(species_id):
             if int(species_id) == -1:
                 # Get submissions with unidentified species
