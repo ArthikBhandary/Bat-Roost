@@ -53,24 +53,23 @@ class EmailConfirmationAPIView(APIView):
 
 
 
-# class LoginApiView(LoginView):
-#
-#     serializer_class = LoginApiSerializers
-    # def process_login(self):
-    #     print(self.user.is_verified)
-    #     print("\n\n\n\n")
-    #     if self.user.is_verified:
-    #         super(LoginApiView, self).process_login
-    #     raise ValidationError(
-    #         _("This is not verified"),
-    #         code="non_admin",
-    #     )
-    # def get_response(self):
-    #     print("hello")
-    #
-    #     resp = super(LoginApiView, self).get_response()
-    #     print("hello")
-    #     print(resp)
-    #     print("hello")
-    #
-    #     return resp
+class LoginApiView(LoginView):
+
+    def post(self, request, *args, **kwargs):
+        self.request = request
+        try:
+            if self.request.data.get("username"):
+                user = User.objects.get(username=self.request.data["username"])
+            elif self.request.data.get("email"):
+                user = User.objects.get(email=self.request.data["email"])
+            if not user.is_verified:
+                send_email_confirmation(request, user)
+                return Response({'non_field_errors': ['Email not Verified. Email confirmation sent']}, status=status.HTTP_403_FORBIDDEN)
+        except:
+            pass
+        self.serializer = self.get_serializer(data=self.request.data,
+                                              context={'request': request})
+        self.serializer.is_valid(raise_exception=True)
+
+        self.login()
+        return self.get_response()

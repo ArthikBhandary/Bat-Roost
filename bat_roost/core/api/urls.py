@@ -1,8 +1,6 @@
 from django.urls import path
-from rest_auth.views import LoginView as LoginApiView
 
-# from rest_auth.views import LoginView as LoginApiView
-from core.api.views import UserDataAPIView, EmailConfirmationAPIView
+from core.api.views import UserDataAPIView, EmailConfirmationAPIView, LoginApiView
 
 
 app_name = "core"
