@@ -1,21 +1,16 @@
-from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, ListCreateAPIView
-from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.parsers import FormParser, MultiPartParser
-from rest_framework.response import Response
-from rest_framework import exceptions, status
-
-from submission.api.serializers import SubmissionSerializer, SubmissionDetailSerializer, SubmissionListSerializer, ImageCreateSerializer, SpeciesSerializer
-from submission.models import Submission, SubmissionImage, Species
-
-from django.shortcuts import get_object_or_404
-from django.http import HttpResponse
-from django.contrib.gis.geos import Point
-from core.models import User
-from django.core.exceptions import ValidationError
 import csv
-from decimal import Decimal
 import json
+
+from django.contrib.gis.geos import Point
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+from rest_framework import status
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView
+from rest_framework.parsers import FormParser, MultiPartParser
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from submission.api.serializers import SubmissionSerializer, ImageCreateSerializer, SpeciesSerializer
+from submission.models import Submission, Species
 
 
 class SubmissionCreateAPIView(CreateAPIView):
@@ -24,7 +19,7 @@ class SubmissionCreateAPIView(CreateAPIView):
     serializer_class = SubmissionSerializer
 
     def create(self, request, *args, **kwargs):
-        if("latitude" not in request.data or "longitude" not in request.data):
+        if "latitude" not in request.data or "longitude" not in request.data:
             return Response({"non_field_errors": "Position is required"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
@@ -78,7 +73,7 @@ class SubmissionCreateAPIView(CreateAPIView):
 
 class SubmissionListApiView(ListAPIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = SubmissionListSerializer
+    serializer_class = SubmissionSerializer
 
     def get_queryset(self):
         return Submission.objects.filter(user=self.request.user)
@@ -94,7 +89,7 @@ class SpeciesApiView(ListAPIView):
 
 class SubmissionDetailApiView(RetrieveAPIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = SubmissionDetailSerializer
+    serializer_class = SubmissionSerializer
 
     def get_object(self):
         return get_object_or_404(Submission, pk=self.request.GET.get("pk"))

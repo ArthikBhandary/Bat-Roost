@@ -14,37 +14,19 @@ class ImageSerializer(serializers.ModelSerializer):
         model = SubmissionImage
         fields = ["image"]
 
+
 class SpeciesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Species
-        fields = ("pk", "name")
+        fields = ("pk", "name", "scientific_name")
 
 
 class SubmissionSerializer(serializers.ModelSerializer):
     images = ImageSerializer(read_only=True, many=True)
     species = SpeciesSerializer(read_only=True, many=True)
+
     class Meta:
         model = Submission
         fields = ("pk", "status", "description", "approx_bats", "submission_time",
-                  "photo_taken_time",  "images",  "latitude", "longitude", "review", "species")
-        read_only_fields = ["pk", "images", "review", "species"]
-
-
-class SubmissionListSerializer(serializers.ModelSerializer):
-    images = ImageSerializer(read_only=True, many=True)
-    species = SpeciesSerializer(read_only=True, many=True)
-    class Meta:
-        model = Submission
-        fields = ("pk", "status", "description", "approx_bats", "submission_time",
-                  "photo_taken_time",  "images",  "latitude", "longitude", "review", "species")
-        read_only_fields = ["pk", "images", "review", "species"]
-
-
-class SubmissionDetailSerializer(serializers.ModelSerializer):
-    images = ImageSerializer(read_only=True, many=True)
-    species = SpeciesSerializer(read_only=True, many=True)
-    class Meta:
-        model = Submission
-        fields = ("pk", "status", "description", "approx_bats", "submission_time",
-                  "photo_taken_time",  "images",  "latitude", "longitude", "review", "species")
+                  "photo_taken_time", "images", "latitude", "longitude", "review", "species")
         read_only_fields = ["pk", "images", "review", "species"]
