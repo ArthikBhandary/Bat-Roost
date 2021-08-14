@@ -172,6 +172,8 @@ LOGIN_REDIRECT_URL = 'submission:AllSubmissionView'
 # MAILER_EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 # EMAIL_BACKEND = "mailer.backend.DbBackend"
+DEFAULT_FROM_EMAIL = "example@email.com"
+
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True

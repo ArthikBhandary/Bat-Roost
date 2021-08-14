@@ -54,7 +54,7 @@
                 <option value="" disabled selected>Choose your option</option>
                 <option value="-1">Unidentified</option>
                 {% for specie in species_list %}
-                    <option value="{{ specie.id }}">{{ specie.name }}</option>
+                    <option value="{{ specie.id }}">{{ specie.name }} ({{ specie.scientific_name }})</option>
                 {% endfor %}
             </select>
         </div>
