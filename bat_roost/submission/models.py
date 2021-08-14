@@ -7,9 +7,10 @@ from submission.misc_functions import image_name
 
 class Species(models.Model):
     name = models.CharField(max_length=250)
+    scientific_name = models.CharField(max_length=255)
 
     def __str__(self):
-        return self.name
+        return "{name} ({scientific_name})".format(name=self.name, scientific_name=self.scientific_name)
 
 
 class Submission(gmodels.Model):
@@ -61,6 +62,8 @@ class Submission(gmodels.Model):
         return str(self.pk) + self.user.username
 
     def get_all_species_string(self):
+        if not self.species.exists():
+            return "Unidentified"
         return ", ".join(str(specie.name) for specie in self.species.all())
 
     def __str__(self):
