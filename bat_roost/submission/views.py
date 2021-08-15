@@ -14,7 +14,6 @@ from django.core.serializers import serialize
 from core.permission import IsUserAdminTestMixin
 from core.misc_functions import is_int_convertible
 
-
 class AllSubmissionDetails(IsUserAdminTestMixin, DetailView):
     model = Submission
     template_name = "submission/sub_det.html"
@@ -154,19 +153,22 @@ def DownloadSubmission(request):
     response['Content-Disposition'] = 'attachment; filename="submission.csv"'
     writer = csv.writer(response, delimiter=',')
 
-    writer.writerow(['user', 'description', 'approx_bats',
+    writer.writerow(['id', 'user', 'description', 'approx_bats',
                      'submission_time', 'photo_taken_time', 'status', 'latitude', 'longitude', 'species', 'image1',
                      'image2', 'image3', 'image4', 'image5'])
     for obj in submission_list:
         species_string = ", ".join(str(specie.name) for specie in obj.species.all())
 
-        row_to_add = [obj.user, obj.description, obj.approx_bats,
+        row_to_add = [obj.pk, obj.user, obj.description, obj.approx_bats,
                       obj.submission_time, obj.photo_taken_time, obj.status, obj.latitude, obj.longitude,
                       species_string]
         for image in obj.images.all():
             row_to_add.append(request.build_absolute_uri(image.image.url))
         writer.writerow(row_to_add)
     return response
+
+
+
 
 
 class LocationView(TemplateView):

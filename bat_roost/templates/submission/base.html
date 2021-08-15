@@ -8,7 +8,7 @@
     <title>{% block head_title %}{% endblock %}</title>
     <!-- CSS only -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <script type = "text/javascript" src = "https://code.jquery.com/jquery-2.1.1.min.js">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js">
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -21,45 +21,84 @@
 <body class="yellow lighten-5">
 
 
-    <nav class="teal accent-3">
-        <div class="nav-wrapper teal accent-3 ">
-            <a href="#" data-target="mobile-nav" class="sidenav-trigger left"><i class="material-icons">menu</i></a>
-            <a href="{% url 'submission:AllSubmissionView' %}" class="brand-logo ">
-                <img src="{% static 'img/bcit_logo_with_text.png' %}" alt="logo" style="height:64px">
-            </a>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li>
-                    <a class="nav-link black-text" href="{% url 'submission:AllSubmissionView' %}">All Submission</a>
-                </li>
+<nav class="teal accent-3">
+    <div class="nav-wrapper teal accent-3 ">
+        <a href="#" data-target="mobile-sidenav" class="sidenav-trigger left"><i class="material-icons">menu</i></a>
 
+        <a href="{% url 'submission:AllSubmissionView' %}" class="brand-logo ">
+            <img src="{% static 'img/bcit_logo_with_text.png' %}" alt="logo" style="height:64px">
+        </a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li>
+                <a class="nav-link black-text" href="{% url 'submission:AllSubmissionView' %}">All Submission</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link black-text" href="{% url 'core:download_user' %}?{{ search_params }}">Download
+                    Users</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link black-text" href="{% url 'submission:DownloadSubmission' %}?{{ search_params }}">DownloadCSV</a>
+            </li>
+            {% if search_params %}
                 <li class="nav-item">
-                  <a class="nav-link black-text" href="{% url 'submission:DownloadSubmission' %}?{{ search_params }}">DownloadCSV</a>
+                    <a class="nav-link black-text" href="{% url 'submission:loc' %}?{{ search_params }}">Filtered
+                        locations</a>
                 </li>
-                {% if search_params %}
-                   <li class="nav-item">
-                      <a class="nav-link black-text" href="{% url 'submission:loc' %}?{{ search_params }}">Filtered locations</a>
-                    </li>
-                {% endif %}
-                <li class="nav-item">
-                  <a class="nav-link black-text" href="{% url 'submission:loc' %}">All locations</a>
-                </li>
-            </ul>
-        </div>
-
-    </nav>
-
-
-    <div class=''>
-        {% block body_block %}
-        {% endblock %}
+            {% endif %}
+            <li class="nav-item">
+                <a class="nav-link black-text" href="{% url 'submission:loc' %}">All locations</a>
+            </li>
+        </ul>
     </div>
+
+</nav>
+<ul class="sidenav teal accent-3" id="mobile-sidenav">
+    <li>
+        <a class="nav-link black-text" href="{% url 'submission:AllSubmissionView' %}">All Submission</a>
+    </li>
+    <li>
+        <div class="divider black"></div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link black-text"
+           href="{% url 'submission:DownloadSubmission' %}?{{ search_params }}">DownloadCSV</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link black-text" href="{% url 'core:download_user' %}?{{ search_params }}">Download
+            Users</a>
+    </li>
+    <li>
+        <div class="divider black"></div>
+    </li>
+    {% if search_params %}
+        <li class="nav-item">
+            <a class="nav-link black-text" href="{% url 'submission:loc' %}?{{ search_params }}">Filtered
+                locations</a>
+        </li>
+        <li>
+            <div class="divider black"></div>
+        </li>
+    {% endif %}
+    <li class="nav-item">
+        <a class="nav-link black-text" href="{% url 'submission:loc' %}">All locations</a>
+    </li>
+    <li>
+        <div class="divider black"></div>
+    </li>
+</ul>
+
+
+<div class=''>
+    {% block body_block %}
+    {% endblock %}
+</div>
 </body>
 {% block extra_css_js %}
 {% endblock %}
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  var elems = document.querySelectorAll('.sidenav');
-  var instances = M.Sidenav.init(elems, {});
-});
+    document.addEventListener('DOMContentLoaded', function () {
+        var elems = document.querySelectorAll('.sidenav');
+        var instances = M.Sidenav.init(elems, {});
+    });
 </script>
 </html>
