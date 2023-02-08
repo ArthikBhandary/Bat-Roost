@@ -31,8 +31,5 @@ Shell comands
   ```
 
   The server should run on [127.0.0.1:8000](127.0.0.1:8000) .
-  If the port 8000 is busy, instead run `python manage.py runserver 2020` or a random port between 0 to 64000 instead of 2020.
+  If the port 8000 is busy, instead run `python manage.py runserver 2020` or a random port between 1025 to 64000 instead of 2020.
 
-  # NOTE
-
-Only [127.0.0.1:8000/core/login](127.0.0.1:8000/login) is implemented now
