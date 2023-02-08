@@ -21,7 +21,7 @@ To confirm this is correct, go to {{ activate_url }}
 
 You will need to use your email ID to login to the Map a Bat Roost app in the future.
 
-If you have any question, please don’t hesitate to get in touch at example@email.com.
+If you have any question, please don’t hesitate to get in touch at email@host
 
 We look forward to seeing your contribution to map the bat roosts across India and help us monitor them.
 

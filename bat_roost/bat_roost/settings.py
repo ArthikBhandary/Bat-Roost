@@ -19,7 +19,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'enter_your_secret_key_a33ib@jb5nc49'
+SECRET_KEY = 'enter_django_secret_key_43kjngs&kngrwo[i50]'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -100,8 +100,8 @@ SITE_ID = 1
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'postgres',
-        'USER': 'postgres',
+        'NAME': 'name',
+        'USER': 'user',
         'HOST': 'localhost',
         'PASSWORD': 'password',
         'PORT': '5432',
@@ -110,8 +110,8 @@ DATABASES = {
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'mapabatroost',
-# 	'USER': 'mapabatroost',
+#         'NAME': 'user',
+# 	'USER': 'user',
 # 	'PASSWORD': 'password',
 #     }
 # }
@@ -172,7 +172,7 @@ LOGIN_REDIRECT_URL = 'submission:AllSubmissionView'
 # MAILER_EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 # EMAIL_BACKEND = "mailer.backend.DbBackend"
-DEFAULT_FROM_EMAIL = "example@email.com"
+DEFAULT_FROM_EMAIL = "email@host.com"
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = 'smtp.gmail.com'
@@ -180,7 +180,7 @@ EMAIL_USE_TLS = True
 # EMAIL_USE_SSL = True
 EMAIL_PORT = 587
 # password associated with above email-id
-EMAIL_HOST_USER = 'example@email.com'
+EMAIL_HOST_USER = 'email@host'
 EMAIL_HOST_PASSWORD = 'password'  # password associated with above email-id
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
